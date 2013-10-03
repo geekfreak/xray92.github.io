@@ -1,0 +1,1629 @@
+<p>Breeder Source Code</p>
+<pre>
+Main.drawStrip:
+Sub drawStrip(byref source as editablemovie, byref g as graphics, gene as string, still as integer, frame as integer,fore as color,mutate as integer)
+  
+  dim x,y as integer
+  dim c as color
+  dim p,z as picture
+  
+  p = newpicture(60,60,32)
+  z = newpicture(60,60,32)
+  
+  if source = nil then
+    return
+  end if
+  
+  source.TimeValue = frame
+  
+  if still = 1 then
+    g.forecolor = app.GeneColor(4) //Main.backcolor
+    g.fillrect 1,0,g.width,g.height
+  end if
+  
+  g.forecolor = rgb(80,80,80)
+  g.drawrect 63*(frame-1)+2,1,60,60
+  g.forecolor = rgb(255,255,255)
+  g.drawrect 63*(frame-1)+4,3,60,60
+  g.forecolor = rgb(128,128,128)
+  g.drawline 1,64,g.width-3,64
+  g.ForeColor = fore
+  g.drawpicture source.picture,63*(still-1)+2,3,60,60, 0,0,source.picture.width,source.picture.height
+  
+  p.graphics.drawpicture source.picture,0,0,60,60,0,0,source.picture.width,source.picture.height
+  select case mutate
+  case 0
+    // no mutation
+  case 1
+    app.blur(p,z)
+  case 2
+    app.draw2ply(p,z)
+  case 3
+    app.draw4ply(p,z)
+  case 4
+    app.flicker(p,z)
+  case 5
+    app.invert(p,z)
+  case 6
+    app.rotate(p,z)
+  case 7
+    app.Interference(p,z)
+  case 8
+    app.SloMo(p,z)
+  end select
+  g.drawpicture p,63*(still-1)+2,3,60,60
+end if
+
+g.textfont = "chromosome"
+g.textsize = 16
+g.bold = true
+g.drawstring gene,63 *(still-1)+3,g.height-4
+
+End Sub
+
+Main.drawChildStrip:
+Sub drawChildStrip(index as integer)
+  
+  dim a,b as editableMovie
+  dim g as graphics
+  dim x as integer
+  dim gColor as color
+  
+  a = alpha
+  b = beta
+  g = chGenome.buffer.Graphics
+  
+  
+  for x = 1  to 8
+    
+    if childGenome(index,x).pGeneMutation = 0 then
+      gColor = app.geneColor(childGenome(index,x).pGeneParent)
+    end if
+    
+    if childGenome(index,x).pGeneParent <> 2 or childGenome(index,x).pGeneText = alphaGenome(x).pGeneText or childGenome(index,x).pGeneText = betaGenome(x).pGeneText then
+      gColor = app.geneColor(ChildGenome(index,x).pGeneParent)
+    else
+      gColor = app.geneColor(2)
+    end if
+    
+    if ChildGenome(index,x).pGeneParent = 0 then
+      drawStrip(a,g,ChildGenome(index,x).pGeneText,x,alphaGenome(x).pGeneStart,gColor,ChildGenome(index,x).pGeneMutation)
+    else
+      drawStrip(b,g,ChildGenome(index,x).pGeneText,x,betaGenome(x).pGeneStart,gColor,ChildGenome(index,x).pGeneMutation)
+    end if
+  next
+  
+  
+End Sub
+
+Main.getMutation:
+Function getMutation() As Integer
+  
+  dim m,c as integer
+  
+  c = 0
+  m = (rnd*100)
+  if m <= app.mteFreq then
+    m = 0
+    while m = 0 and c< 100
+      c = c + 1
+      m = (rnd*8)+1
+      select case m
+      case 1
+        if not app.mteBlur then
+          m = 0
+        end if
+      case 2
+        if not  app.mte2ply then
+          m = 0
+        end if
+      case 3
+        if not  app.mte4ply then
+          m = 0
+        end if
+      case 4
+        if not  app.mteFlicker then
+          m = 0
+        end if
+      case 5
+        if not  app.mteInvert then
+          m = 0
+        end if
+      case 6
+        if not  app.mteRotate then
+          m = 0
+        end if
+      case 7
+        if not  app.mteShudder then
+          m = 0
+        end if
+      case 8
+        if not  app.mteSloMo then
+          m = 0
+        end if
+      end select
+    wend
+  else
+    m = 0
+  end if
+  return m
+  
+End Function
+
+Main.getParent:
+Function getParent(mutation as integer) As Integer
+  
+  dim x as integer
+  
+  if app.selMode = 3  and (rnd*4) > 2 and mutation <> 0 then
+    x = 2
+  else
+    x = floor(rnd*2)
+  end if
+  
+  return x
+  
+End Function
+
+Main.LoadMovie:
+Sub LoadMovie(index as integer)
+  
+  dim f as folderitem
+  dim uG,Uf,uL,uO,s as string
+  dim r as boolean
+  dim x,frmRate as integer
+  dim em as editablemovie
+  dim g as graphics
+  
+  f=getopenfolderitem("video/quicktime")
+  
+  if f <> nil then
+    
+    if index = 0 then
+      alpha=f.openEditableMovie
+      r = alpha.UserData.getUserData("©inf",1, uG) // read genome
+      r = alpha.UserData.getUserData("©des",1, uF) // read frmRate
+    else
+      beta=f.openEditableMovie
+      r = beta.UserData.getUserData("©inf",1, uG) // read genome
+      r = beta.UserData.getUserData("©des",1, uF) // read frmRate
+    end if
+    
+    uG = right(uG,len(uG)-4)
+    uF = right(uF,len(uF)-4)
+    frmRate = val(uF)
+    
+    for x =1 to  countFields(uG," ")-1
+      if index=0 then
+        em = alpha
+        alphaGenome(x).pGeneText = nthField(uG," ",x)
+        alphaGenome(x).pGeneStart = (x-1) * frmRate
+        alphaGenome(x).pGeneStop = alphaGenome(x).pGeneStart + frmRate - 1
+        g = ParentGenome(index).buffer.graphics
+        drawStrip(em,g,alphaGenome(x).pGeneText,x,alphaGenome(x).pGeneStart,app.geneColor(index),-1)
+      else
+        em = beta
+        betaGenome(x).pGeneText = nthField(uG," ",x)
+        betaGenome(x).pGeneStart = (x-1) * frmRate
+        betaGenome(x).pGeneStop = betaGenome(x).pGeneStart + frmRate - 1
+        g = ParentGenome(index).buffer.graphics
+        drawStrip(em,g,betaGenome(x).pGeneText,x,betaGenome(x).pGeneStart,app.geneColor(index),-1)
+      end if
+      ParentGenome(index).refresh
+    next
+    ParentInfo(index).text= f.name + " (" + str(countFields(uG," ")-1) + " Genes) "
+  end if
+  
+End Sub
+
+Main.breed:
+Sub breed()
+  dim pic as picture
+  dim g as graphics
+  dim x,index,pos,l as integer
+  dim effect,parent as string
+  
+  effect = "--BL2P4PFLNGROIFSM"
+  
+  for x = 0 to 3
+    pic = newpicture(genome(x).width,genome(x).height,32)
+    g = pic.graphics
+    g.forecolor = app.geneColor(4)
+    g.fillrect 3,3,g.width-6,g.height-6
+    g.textfont = "chromosome"
+    pos = 5
+    for index = 1 to 8
+      
+      childGenome(x,index).pGeneMutation = getMutation
+      childGenome(x,index).pGeneParent = getParent(childGenome(x,index).pGeneMutation)
+      
+      select case childGenome(x,index).pGeneParent
+      case 0
+        parent = "a"
+        childGenome(x,index).pGeneText = alphaGenome(index).pGeneText
+        childGenome(x,index).pGeneStart = alphaGenome(index).pGeneStart
+        childGenome(x,index).pGeneStop = alphaGenome(index).pGeneStop
+      case 1
+        parent = "b"
+        childGenome(x,index).pGeneText = betaGenome(index).pGeneText
+        childGenome(x,index).pGeneStart = betaGenome(index).pGeneStart
+        childGenome(x,index).pGeneStop = betaGenome(index).pGeneStop
+      case 2
+        parent = "c"
+        childGenome(x,index).pGeneText = ""
+        for l = 1 to 4
+          if rnd*2 < 1 then
+            childGenome(x,index).pGeneText = childGenome(x,index).pGeneText + mid(alphaGenome(index).pGeneText,l,1)
+          else
+            childGenome(x,index).pGeneText =childGenome(x,index).pGeneText + mid(betaGenome(index).pGeneText,l,1)
+          end if
+        next
+        if rnd*2 < 1 then
+          childGenome(x,index).pGeneStart = alphaGenome(index).pGeneStart
+          childGenome(x,index).pGeneStop = alphaGenome(index).pGeneStop
+        else
+          childGenome(x,index).pGeneStart = betaGenome(index).pGeneStart
+          childGenome(x,index).pGeneStop = betaGenome(index).pGeneStop
+        end if
+        
+      end select
+      
+      if childGenome(x,index).pGeneMutation = 0 then
+        g.ForeColor = app.geneColor(childGenome(x,index).pGeneParent)
+      else
+        g.ForeColor = app.geneColor(3)
+      end if
+      g.drawstring childGenome(x,index).pGeneText,pos,g.textheight-3
+      if childGenome(x,index).pGeneParent <> 2 or childGenome(x,index).pGeneText = alphaGenome(index).pGeneText or childGenome(x,index).pGeneText = betaGenome(index).pGeneText then
+        g.ForeColor = rgb(255,255,255)
+      else
+        g.ForeColor = app.geneColor(2)
+      end if
+      g.drawstring str(index)+parent +mid(effect,(childGenome(x,index).pGeneMutation*2)+1,2),pos,(g.textheight-5)*2
+      pos = pos + g.stringwidth(childGenome(x,index).pGeneText) + 3
+      
+    next
+    Genome(x).buffer.graphics.drawpicture pic,0,0
+    Genome(x).refresh
+  next 
+  
+End Sub
+
+Main.Preview:
+Sub Preview()
+  dim a,b as editableMovie
+  dim x as integer
+  
+  a = alpha
+  b = beta
+  
+  if genome(0).Selected  then 
+    drawChildStrip(0)
+  else
+    if genome(1).Selected  then 
+      drawChildStrip(1)
+    else
+      if genome(2).Selected  then 
+        drawChildStrip(2)
+      else
+        if genome(3).Selected then 
+          drawChildStrip(3)
+        else
+          drawChildStrip(0)
+        end if
+      end if
+    end if
+  end if
+  chGenome.refresh
+  
+End Sub
+
+Main.Close:
+Sub Close()
+  quit
+End Sub
+
+Main.Open:
+Sub Open()
+  
+  dim b,x,y as integer
+  dim g as graphics
+  
+  dim x as integer
+  
+  for x = 1 to 32
+    alphaGenome(x) = new GeneSequence
+    betaGenome(x) = new GeneSequence
+    for y = 0 to 3
+      ChildGenome(y,x) = new GeneSequence
+      Genome(y).selectEnabled = True
+    next
+  next
+  
+  for b = 0 to 2
+    if b<>2 then
+      //parentGenome(b).setBackColor(app.geneColor(4))
+      g = parentGenome(b).Buffer.graphics
+    else
+      //chGenome.setBackColor(app.geneColor(4))
+      g = chGenome.Buffer.graphics
+    end if
+    g.forecolor = main.backcolor
+    g.fillrect 0,0,g.width,g.height
+    g.forecolor =  rgb(128,128,128) 
+    g.drawline 1,64,g.width-2,64
+    g.ForeColor = me.backcolor
+  next
+  
+  for x = 0 to 3
+    g = genome(x).buffer.graphics
+    g.forecolor = main.backColor
+    g.fillrect 3,3,g.width-6,g.height-6
+  next
+  
+End Sub
+
+Main.btnParent.Action:
+Sub Action(Index As Integer)
+  
+  loadMovie(index)
+  
+End Sub
+
+Main.btnBreed.Action:
+Sub Action()
+  
+  breed
+  
+End Sub
+
+Main.btnSelection.Action:
+Sub Action()
+  
+  selection.show
+  
+End Sub
+
+Main.btnPreview.Action:
+Sub Action()
+  
+  Preview
+  
+End Sub
+
+Main.btnRender.Action:
+Sub Action()
+  
+  Render.show
+  
+End Sub
+
+Main.btnParentInfo.Action:
+Sub Action(Index As Integer)
+  
+  App.Prefs.setPrefValue("current",index)
+  MovieInfo.show
+  
+End Sub
+
+Main.btnMutation.Action:
+Sub Action()
+  mutate.show
+End Sub
+
+App.rotate:
+Sub rotate(byref p as picture, byref z as picture)
+  
+  dim x,y as integer
+  
+  for x = 0 to p.width  
+    for y = 0 to p.height
+      z.RGBSurface.pixel(y,x) = p.RGBSurface.pixel(x,y) // flip
+    next
+  next
+  p.graphics.drawpicture z,0,0,p.width,p.height,0,0,p.height,p.width
+  
+End Sub
+
+App.draw2ply:
+Sub draw2ply(byref p as picture, byref z as picture)
+  
+  dim x,y as integer
+  
+  x = p.width
+  y = p.height
+  
+  z.graphics.drawpicture p,0,0,x,y,0,0,x,y
+  p.graphics.drawpicture z,0,0,x,y/2,0,0,x,y
+  p.graphics.drawpicture z,0,y/2,x,y/2,0,0,x,y
+  
+End Sub
+
+App.draw4ply:
+Sub draw4ply(byref p as picture, byref z as picture)
+  
+  dim x,y as integer
+  
+  x = p.width
+  y = p.height
+  
+  z.graphics.drawpicture p,0,0,x,y,0,0,x,y
+  p.graphics.drawpicture z,0,0,x/2,y/2,0,0,x,y
+  p.graphics.drawpicture z,0,y/2,x/2,y/2,0,0,x,y
+  p.graphics.drawpicture z,x/2,0,x/2,y/2,0,0,x,y
+  p.graphics.drawpicture z,x/2,y/2,x/2,y/2,0,0,x,y
+  
+End Sub
+
+App.invert:
+Sub invert(byref p as picture, byref z as picture)
+  
+  dim x,y as integer
+  dim clr as color
+  
+  for x = 0 to p.width  
+    for y = 0 to p.height
+      clr = p.RGBSurface.pixel(x,y) 
+      z.RGBSurface.pixel(x,y)  = rgb (255 -clr.red,255 -clr.green,255 -clr.blue)
+    next
+  next
+  p.graphics.drawpicture z,0,0,x,y,0,0,x,y
+  
+End Sub
+
+App.interference:
+Sub interference(byref p as picture, byref z as picture)
+  
+  dim l as integer
+  
+  z.graphics.drawpicture p,0,0,p.width,p.height
+  for l = 0 to 250
+    z.RGBSurface.pixel(rnd*p.width,rnd*p.height) = rgb(rnd*256,rnd*256,rnd*256) 
+  next
+  p.graphics.drawpicture z,0,0,p.width,p.height,0,0,p.width,p.height
+  
+End Sub
+
+App.blur:
+Sub blur(byref p as picture, byref z as picture)
+  
+  dim x,y,r as integer
+  
+  x = p.width
+  y = p.height
+  r = rnd*(10)
+  
+  z.graphics.drawpicture p,0,0,x,y,0,0,x,y
+  p.graphics.drawpicture z,0,0,x,y,0+r,0+r,x-r,y-r
+  
+End Sub
+
+App.flicker:
+Sub flicker(byref p as picture, byref z as picture)
+  
+  dim x,y,r as integer
+  
+  x = p.width
+  y = p.height
+  
+  z.graphics.drawpicture p,0,0,x,y,0,0,x,y
+  for x = 0 to p.width  
+    r = (rnd*3)-1
+    p.graphics.drawpicture z,x,0-r,1,p.height-r, x,0,1,p.height
+  next
+  
+End Sub
+
+App.SloMo:
+Sub SloMo(byref p as picture, byref z as picture)
+  
+  // ??
+  
+End Sub
+
+App.EnableMenuItems:
+Sub EnableMenuItems()
+  
+  AppleAbout.enabled = true
+  
+  FileLoadAlpha.enabled = true
+  FileLoadBeta.enabled = true
+  FileBreed.enabled = true
+  FilePreview.enabled = true
+  FileRender.enabled = true
+  
+  //PrefsMenu.enabled =true
+  PrefsColor.enabled = true
+End Sub
+
+App.Close:
+Sub Close()
+  
+  dim x as integer
+  
+  // Save Preference data
+  // setPrefValue("MyPrefAttribute",MyPrefValue)
+  for x = 0 to 4
+    Prefs.setPrefValue("col"+str(x),geneColor(x))
+  next
+  
+  Prefs.Save
+  
+End Sub
+
+App.Open:
+Sub Open()
+  
+  dim x as integer
+  
+  main.hide
+  
+  // Initialize Application
+  Prefs = new cPreferences("vgBreeder Preferences")
+  
+  mteFreq = 25
+  
+  app.geneColor(0) = rgb(255,128,0)
+  app.geneColor(1) = rgb(0,128,255)
+  app.geneColor(2) = rgb(255,0,128)
+  app.geneColor(3) = rgb(255,255,0)
+  
+  for x = 0 to 4
+    app.geneColor(x) = Prefs.getPrefValue("col"+str(x),geneColor(x))
+  next
+  
+  app.mteBlur = Prefs.getPrefValue("Blur",app.mteBlur)
+  app.mte2ply =  Prefs.getPrefValue("2Ply",app.mte2ply)
+  app.mte4ply =  Prefs.getPrefValue("4Ply",app.mte4ply)
+  app.mteFlicker =  Prefs.getPrefValue("Flicker",app.mteFlicker)
+  app.mteInvert =  Prefs.getPrefValue("Invert",app.mteInvert)
+  app.mteRotate =  Prefs.getPrefValue("Rotate",app.mteRotate)
+  app.mteShudder =  Prefs.getPrefValue("Shudder",app.mteShudder)
+  app.mteSloMo =  Prefs.getPrefValue("SloMo",app.mteSloMo)
+  app.mteFreq = Prefs.getPrefValue("Freq",app.mteFreq)
+  
+  for x = 0 to 3 
+    if selection.rdMode(x).value then
+      app.selMode = x
+    end if
+  next
+  
+  mutate.hide
+  selection.hide
+  
+  splashScreen.show
+  
+End Sub
+
+OptionDialog.Ask:
+Function Ask(MsgText as String, Icon as String, ButtonText as String, DoBeep as Boolean) As String
+  
+  MyMessage = MsgText
+  MyIcon = Icon
+  MyButtons = ButtonText
+  
+  'These Setup methods must be called in this order because 
+  'the latter ones reference earlier one's results.
+  SetupButtons
+  SetupIcon
+  SetupText
+  
+  If DoBeep Then
+    Beep
+  End
+  
+  Self.ShowModal
+  Self.Close
+  
+  Return ButtonPushed
+  
+End Function
+
+OptionDialog.SetupButtons:
+Sub SetupButtons()
+  
+  Dim ButtonHeight, ButtonWidth, Counter, LastButtonLeft, NumButtons as Integer
+  Dim ButtonText as String
+  Dim ThisButton as OptionButton
+  
+  Const Margin = 10
+  Const TextMargin = 15
+  
+  'First, we need to create the necessary number of buttons.
+  If MyButtons = "" Then
+    'Oops! Must have at least one button so the window can be dismissed.
+    OptionButton(0).Caption = "Error!"
+  Else 'Display a button for each item requested.
+    NumButtons = CountFields(MyButtons, "|")
+    For Counter = 1 to NumButtons
+      If Counter > 1 Then 'We'll need a new button.
+        ThisButton = New OptionButton
+      Else 'Just point to the original.
+        ThisButton = OptionButton(0)
+      End
+      ButtonText = NthField(MyButtons, "|", Counter)
+      While Mid(ButtonText, 2, 1) = ":" 'Option indicated?
+        Select Case Left(ButtonText, 1)
+        Case "C" 'Cancel property.
+          ThisButton.Cancel = True
+        Case "D" 'Default property.
+          ThisButton.Default = True
+        End
+        ButtonText = Right(ButtonText, (Len(ButtonText) - 2))
+      Wend
+      ThisButton.Caption = ButtonText
+    Next
+  End
+  
+  'Now, we need to size and position the buttons we have.
+  ButtonHeight = TextHeight(OptionButton(0).TextFont, OptionButton(0).TextSize, OptionButton(0).Bold, OptionButton(0).Italic, OptionButton(0).Underline)
+  ButtonHeight = ButtonHeight + TextMargin / 2 'Add margins.
+  If ButtonHeight < OptionButton(0).Height Then 'Not less than it started out.
+    ButtonHeight = OptionButton(0).Height
+  End
+  LastButtonLeft = Self.Width
+  For Counter = 1 to NumButtons
+    OptionButton(Counter - 1).Height = ButtonHeight
+    OptionButton(Counter - 1).Top = Self.Height - (ButtonHeight + Margin)
+    ButtonWidth = StringWidth(OptionButton(Counter - 1).Caption, OptionButton(Counter - 1).TextFont, OptionButton(Counter - 1).TextSize, OptionButton(Counter - 1).Bold, OptionButton(Counter - 1).Italic)
+    ButtonWidth = ButtonWidth + TextMargin 'Add margins.
+    If ButtonWidth > OptionButton(Counter - 1).Width Then 'Widen, if needed.
+      OptionButton(Counter - 1).Width = ButtonWidth
+    End
+    OptionButton(Counter - 1).Left = (LastButtonLeft - OptionButton(Counter - 1).Width) - Margin
+    LastButtonLeft = OptionButton(Counter - 1).Left
+  Next
+  
+  'Lastly, we need to make sure the window is wide enough to show all the buttons.
+  If LastButtonLeft < Margin Then 
+    Self.Width = Self.Width + Abs(LastButtonLeft) + Margin
+  End
+End Sub
+
+OptionDialog.SetupText:
+Sub SetupText()
+  
+  Dim LineHeight, LinesNeeded, NewHeight, Newlines, TextLength as Integer
+  
+  Const Margin = 10
+  
+  If IconCanvas.Visible Then 'With icon.
+    StaticText.Left = IconCanvas.Left + IconCanvas.Width + Margin
+  Else 'Without icon.
+    StaticText.Left = Margin
+  End
+  StaticText.Top = Margin
+  StaticText.Width = Self.Width - (StaticText.Left + Margin)
+  StaticText.Height = IconCanvas.Height
+  
+  'At this point the text box is all set, unless the 
+  'text requires more lines than what is showing. So, 
+  'figure out how many lines it needs.
+  TextLength = StringWidth(MyMessage, StaticText.TextFont, StaticText.TextSize, StaticText.Bold, StaticText.Italic)
+  LinesNeeded = Ceil(TextLength / StaticText.Width)
+  'See how many carriage returns are in the text.
+  Newlines = CountFields(MyMessage, Chr(13)) - 1
+  'And increase the line count accordingly.
+  LinesNeeded = LinesNeeded + Newlines
+  LineHeight = TextHeight(StaticText.TextFont, StaticText.TextSize, StaticText.Bold, StaticText.Italic, StaticText.Underline)
+  NewHeight = LinesNeeded * LineHeight
+  If NewHeight > StaticText.Height Then
+    StaticText.Height = NewHeight
+  End
+  
+  'And, lastly, we need to set the window's height to 
+  'accomodate the text height plus the button height 
+  'plus the margin height times three.
+  Self.Height = StaticText.Height + OptionButton(0).Height + (3 * Margin)
+  
+  StaticText.Text = MyMessage
+  
+End Sub
+
+OptionDialog.StringWidth:
+Function StringWidth(TheString as String, Font as String, Size as Integer, Bold as Boolean, Italic as Boolean) As Integer
+  
+  Self.Graphics.Bold = Bold
+  Self.Graphics.Italic = Italic
+  Self.Graphics.TextSize = Size
+  Self.Graphics.TextFont = Font
+  Return Self.Graphics.StringWidth(TheString)
+  
+End Function
+
+OptionDialog.TextHeight:
+Function TextHeight(Font as String, Size as Integer, Bold as Boolean, Italic as Boolean, Underline as Boolean) As Integer
+  
+  Self.Graphics.Bold = Bold
+  Self.Graphics.Italic = Italic
+  Self.Graphics.Underline = Underline
+  Self.Graphics.TextSize = Size
+  Self.Graphics.TextFont = Font
+  Return Self.Graphics.TextHeight
+  
+End Function
+
+OptionDialog.SetupIcon:
+Sub SetupIcon()
+  
+  Dim IconID as Integer
+  
+  Const Margin = 10
+  
+  'Set position and size.
+  IconCanvas.Top = Margin
+  IconCanvas.Left = Margin
+  IconCanvas.Height = IconCanvas.Top + 32
+  IconCanvas.Width = IconCanvas.Left + 32
+  
+  Select Case MyIcon
+  Case ""
+    IconCanvas.Visible = False
+  Case "Note"
+  Case "Stop"
+  Case "Caution"
+  Else 'Get the custom icon.
+    IconID = Val(MyIcon)
+    TheIcon = App.ResourceFork.GetCicn(IconID)
+    If TheIcon = nil Then
+      'Signal IconCanvas's paint event that it's missing.
+      MyIcon = "NoGot"
+    Else
+      TheIcon.Transparent = 1
+    End
+  End
+  
+End Sub
+
+OptionDialog.Say:
+Sub Say(MsgText as String, Icon as String, ButtonText as String, DoBeep as Boolean)
+  
+  dim r as string
+  
+  r = ask(MsgText,Icon,ButtonText,DoBeep)
+  
+End Sub
+
+OptionDialog.Warn:
+Sub Warn(warning as string)
+  
+  Say(warning,"Warning","OK",true)
+  
+End Sub
+
+OptionDialog.OptionButton.Action:
+Sub Action(Index As Integer)
+  
+  ButtonPushed = Me.Caption
+  Self.Hide
+  
+End Sub
+
+OptionDialog.IconCanvas.Paint:
+Sub Paint(g As Graphics)
+  
+  Select Case MyIcon
+  Case "Note"
+    g.DrawNoteIcon 0, 0
+  Case "Stop"
+    g.DrawStopIcon 0, 0
+  Case "Caution"
+    g.DrawCautionIcon 0, 0
+  Case "NoGot" 'Signal from SetupIcon that the resource is missing.
+    g.TextFont = "Geneva"
+    g.TextSize = 9
+    g.Bold = True
+    g.ForeColor = RGB(0,0,0)
+    g.DrawString "Oops! No Icon", 1, g.TextHeight, 30
+  Else
+    g.DrawPicture TheIcon, 0, 0
+  End
+  
+End Sub
+
+cPictureFrame.DrawFrame:
+Sub DrawFrame()
+  
+  dim g as graphics
+  
+  g = Buffer.graphics
+  
+  drawFocus
+  
+  g.forecolor = rgb(25,25,25)
+  g.drawline 1,1,g.width-2,1
+  g.drawline 1,1,1,g.height-2
+  
+  g.forecolor = rgb(235,235,235)
+  g.drawline g.width-2,g.height-2,g.width-2,1
+  g.drawline g.width-2,g.height-2,1,g.height-2
+  
+End Sub
+
+cPictureFrame.BackColor:
+Function BackColor() As color
+  
+  return pBackColor
+  
+End Function
+
+cPictureFrame.setFocus:
+Sub setFocus(setting as boolean)
+  
+  pFocus = setting
+  
+End Sub
+
+cPictureFrame.cPictureFrame:
+Sub cPictureFrame(c as color)
+  
+  setFocus(true)
+  
+End Sub
+
+cPictureFrame.drawFocus:
+Sub drawFocus()
+  
+  dim g as graphics
+  
+  g = Buffer.graphics
+  
+  if pFocus then
+    g.forecolor = pFocusColor
+  else 
+    if selected then
+      g.foreColor = pSelectcolor
+    else
+      g.forecolor = pBackColor
+    end if
+  end if
+  
+  if SelectEnabled then
+    Buffer.graphics.drawrect 0,0,Buffer.width-1,Buffer.height-1
+  end if
+  
+  me.graphics.drawpicture Buffer,0,0
+  
+End Sub
+
+cPictureFrame.Selected:
+Function Selected() As Boolean
+  return pSelected
+End Function
+
+cPictureFrame.setBackColor:
+Sub setBackColor(c as color)
+  pBackColor = c
+End Sub
+
+cPictureFrame.MouseUp:
+Sub MouseUp(X As Integer, Y As Integer)
+  
+  if ticks - pMouseClick < 25 then
+    pSelected = not pSelected
+  end if
+  
+  drawFocus
+  
+End Sub
+
+cPictureFrame.MouseDown:
+Function MouseDown(X As Integer, Y As Integer) As Boolean
+  
+  pMouseClick = ticks
+  return true
+  
+End Function
+
+cPictureFrame.Open:
+Sub Open()
+  
+  Buffer = newpicture (me.Width,me.Height,32)
+  
+  //pBackColor = window.backcolor
+  
+  pSelectColor = rgb(255,0,0)
+  pFocusColor = rgb(0,0,255)
+  
+  SelectEnabled = false
+  
+  Buffer.graphics.forecolor = pBackColor
+  Buffer.graphics.fillrect 0,0,me.width,me.height
+  
+  DrawFrame
+  
+  
+End Sub
+
+cPictureFrame.MouseExit:
+Sub MouseExit()
+  
+  pFocus = false
+  drawFocus
+  
+End Sub
+
+cPictureFrame.MouseEnter:
+Sub MouseEnter()
+  
+  pFocus = true
+  drawFocus
+  
+End Sub
+
+cPictureFrame.Paint:
+Sub Paint(g As Graphics)
+  
+  pBackColor = window.backcolor
+  DrawFrame
+  
+  me.graphics.drawpicture Buffer,0,0
+  
+End Sub
+
+Render.btnRender.Action:
+Sub Action()
+  dim x,y,c,g,frm,strip,effect as integer
+  dim f as folderItem
+  dim t as qtvideotrack
+  dim offspring,parent as editablemovie
+  dim p,z as picture
+  dim clr as color
+  
+  if Main.genome(0).Selected  then 
+    strip = 0
+  else
+    if Main.genome(1).Selected  then 
+      strip = 1
+    else
+      if Main.genome(2).Selected  then 
+        strip = 2
+      else
+        if Main.genome(3).Selected then 
+          strip = 3
+        else
+          strip = 0
+        end if
+      end if
+    end if
+  end if
+  
+  f = getsavefolderitem("quicktime/movie","new genetic movie")
+  if f  = nil then
+    return
+  end if
+  
+  offspring= f.createmovie
+  main.refresh
+  p = newpicture(320,240,32)
+  z = newpicture(320,320,32) // for mutation work
+  
+  z.graphics.forecolor = rgb(200,0,0)
+  z.graphics.fillrect 0,0,320,320
+  t = offspring.newvideotrack(320,240 ,25)
+  frm = 0
+  
+  for c = 1 to 8
+    if Main.childGenome(strip,c).pGeneParent = 0 then
+      parent = Main.alpha
+    else
+      parent = Main.beta
+    end if
+    
+    gs(c) = new geneSequence
+    gs(c).pGeneText = Main.childGenome(strip,c).pGeneText
+    gs(c).pGeneStart = Main.childGenome(strip,c).pGeneStart
+    gs(c).pGeneStop = Main.childGenome(strip,c).pGeneStop
+    gs(c).pGeneMutation = 1
+    gs(c).pGeneParent = 1
+    
+    for g = Main.childGenome(strip,c).pGeneStart to Main.childGenome(strip,c).pGeneStop step 25
+      parent.TimeValue = g
+      prompt.text = str(c) +" : " + str(g - Main.childGenome(strip,c).pGeneStart) + "/" +  str(Main.childGenome(strip,c).pGeneStop  - Main.childGenome(strip,c).pGeneStart) 
+      prompt.refresh
+      p.graphics.Drawpicture parent.picture, 0,0,p.width,p.height, 0,0,parent.picture.width,parent.picture.height
+      display.buffer.graphics.Drawpicture p,0,0,display.width,display.height, 0,0,p.width,p.height
+      
+      select case Main.childGenome(strip,c).pGeneMutation
+      case 0
+      case 1
+        app.blur(p,z)
+      case 2
+        app.draw2ply(p,z)
+      case 3
+        app.draw4ply(p,z)
+      case 4
+        app.flicker(p,z)
+      case 5
+        app.invert(p,z)
+      case 6
+        app.rotate(p,z)
+      case 7
+        app.interference(p,z)
+      case 8
+        t.appendpicture(p)
+      end select
+      
+      t.appendpicture(p)
+      
+      if g = Main.childGenome(strip,c).pGeneStart then
+        display.buffer.graphics.Drawpicture p,0,0,display.width,display.height, 0,0,p.width,p.height
+        display.refresh
+      end if
+      
+    next
+    
+  next
+  
+  offspring = nil
+  moviePath = f.absolutepath
+  
+  //call applescript to update genome data
+  pause.mode = 1
+  
+  
+End Sub
+
+Render.btnClose.Action:
+Sub Action()
+  self.hide
+End Sub
+
+Render.pause.Action:
+Sub Action()
+  
+  dim x as integer
+  dim genome as string
+  
+  genome = ""
+  x = 1
+  do 
+    genome = genome + gs(x).pGeneText + " "
+    x = x + 1
+  loop until gs(x) = nil
+  
+  scriptSetInfo MoviePath, Genome, str( gs(1).pGenestop+1)
+  main.refresh
+  self.refresh
+End Sub
+
+Mutate.Close:
+Sub Close()
+  
+  App.Prefs.setPrefValue("mTop",self.top)
+  App.Prefs.setPrefValue("mLeft",self.left)
+  
+  App.Prefs.setPrefValue("Blur",app.mteBlur)
+  App.Prefs.setPrefValue("2Ply",app.mte2ply)
+  App.Prefs.setPrefValue("4Ply",app.mte4ply)
+  App.Prefs.setPrefValue("Flicker",app.mteFlicker)
+  App.Prefs.setPrefValue("Invert",app.mteInvert)
+  App.Prefs.setPrefValue("Rotate",app.mteRotate)
+  App.Prefs.setPrefValue("Shudder",app.mteShudder)
+  App.Prefs.setPrefValue("SloMo",app.mteSloMo)
+  
+  App.Prefs.setPrefValue("Freq",app.mteFreq)
+  
+  
+End Sub
+
+Mutate.Open:
+Sub Open()
+  
+  self.top = App.Prefs.getPrefValue("mTop",self.top)
+  self.left = App.Prefs.getPrefValue("mLeft",self.left)
+  
+  self.backcolor = main.backcolor
+   
+  mutate.chkBlur.value = app.mteBlur
+  mutate.chk2ply.value = app.mte2ply
+  mutate.chk4ply.value = app.mte4ply
+  mutate.chkFlicker.value = app.mteFlicker
+  mutate.chkInvert.value = app.mteInvert
+  mutate.chkRotate.value = app.mteRotate
+  mutate.chkShudder.value = app.mteShudder
+  mutate.chkSloMo.value = app.mteSloMo
+  mutate.txtFreq.text = str(app.mteFreq)
+  
+End Sub
+
+Mutate.chkRotate.Action:
+Sub Action()
+  app.mteRotate = me.value
+End Sub
+
+Mutate.chk2ply.Action:
+Sub Action()
+  app.mte2ply =  me.value
+End Sub
+
+Mutate.chk4ply.Action:
+Sub Action()
+  app.mte4ply =  me.value
+End Sub
+
+Mutate.chkInvert.Action:
+Sub Action()
+  app.mteInvert = me.value
+End Sub
+
+Mutate.btnOK.Action:
+Sub Action()
+  
+  mutate.hide
+  
+End Sub
+
+Mutate.chkBlur.Action:
+Sub Action()
+  app.mteBlur = me.value
+End Sub
+
+Mutate.chkSloMo.Action:
+Sub Action()
+  app.mteSloMo = me.value
+End Sub
+
+Mutate.chkShudder.Action:
+Sub Action()
+  app.mteShudder = me.value
+End Sub
+
+Mutate.chkFlicker.Action:
+Sub Action()
+  app.mteFlicker = me.value
+End Sub
+
+Mutate.LittleArrows1.Up:
+Sub Up()
+  app.mteFreq = app.mteFreq+1
+  if app.mteFreq > 100 then
+    app.mteFreq  = 100
+  end if
+  slider1.value = app.mteFreq
+  txtFreq.text = str(app.mteFreq)+"%"
+End Sub
+
+Mutate.LittleArrows1.Down:
+Sub Down()
+  app.mteFreq = app.mteFreq-1
+  if app.mteFreq < 1 then
+    app.mteFreq  = 0
+  end if
+  slider1.value = app.mteFreq
+  txtFreq.text = str(app.mteFreq)+"%"
+End Sub
+
+Mutate.txtFreq.TextChange:
+Sub TextChange()
+  me.text = str(app.mteFreq)+"%"
+End Sub
+
+Mutate.Slider1.Open:
+Sub Open()
+  me.value = app.mtefreq
+End Sub
+
+Mutate.Slider1.ValueChanged:
+Sub ValueChanged()
+  app.mteFreq = me.value
+  txtFreq.text = str(app.mteFreq)+"%"
+End Sub
+
+Mutate.btnDefault.Action:
+Sub Action()
+  app.mteFreq = 25
+  slider1.value = app.mteFreq
+  txtFreq.text = str(app.mteFreq)+"%"
+End Sub
+
+Mutate.btnAll.Action:
+Sub Action()
+  
+  app.mteBlur = true
+  app.mte2ply = true
+  app.mte4ply = true
+  app.mteFlicker = true
+  app.mteInvert = true
+  app.mteRotate = true
+  app.mteShudder = true
+  app.mteSloMo = true
+   
+  chkBlur.value = app.mteBlur
+  chk2ply.value = app.mte2ply
+  chk4ply.value = app.mte4ply
+  chkFlicker.value = app.mteFlicker
+  chkInvert.value = app.mteInvert
+  chkRotate.value = app.mteRotate
+  chkShudder.value = app.mteShudder
+  chkSloMo.value = app.mteSloMo
+  
+End Sub
+
+Mutate.btnNone.Action:
+Sub Action()
+  
+  app.mteBlur = false
+  app.mte2ply = false
+  app.mte4ply = false
+  app.mteFlicker = false
+  app.mteInvert = false
+  app.mteRotate = false
+  app.mteShudder = false
+  app.mteSloMo = false
+  
+  chkBlur.value = app.mteBlur
+  chk2ply.value = app.mte2ply
+  chk4ply.value = app.mte4ply
+  chkFlicker.value = app.mteFlicker
+  chkInvert.value = app.mteInvert
+  chkRotate.value = app.mteRotate
+  chkShudder.value = app.mteShudder
+  chkSloMo.value = app.mteSloMo
+  
+End Sub
+
+Selection.Close:
+Sub Close()
+  
+  App.Prefs.setPrefValue("sTop",self.top)
+  App.Prefs.setPrefValue("sLeft",self.left)
+  
+End Sub
+
+Selection.Open:
+Sub Open()
+  
+  self.top = App.Prefs.getPrefValue("sTop",self.top)
+  self.left = App.Prefs.getPrefValue("sLeft",self.left)
+  self.backcolor = main.backcolor
+  
+End Sub
+
+Selection.rdMode.Action:
+Sub Action(Index As Integer)
+  app.selMode = index
+End Sub
+
+Selection.chkRepeat.Action:
+Sub Action()
+  app.selRepeat = chkRepeat.enabled
+End Sub
+
+Selection.chkOmit.Action:
+Sub Action()
+  app.selOmit=chkOmit.enabled
+End Sub
+
+Selection.chkShuffle.Action:
+Sub Action()
+  app.selShuffle = chkShuffle.enabled
+End Sub
+
+Selection.btnOK.Action:
+Sub Action()
+  selection.hide
+End Sub
+
+SplashScreen.Close:
+Sub Close()
+  
+  app.Prefs.setPrefValue("sx",str(splashScreen.top))
+  app.Prefs.setPrefValue("sy",str(splashScreen.left))
+  
+End Sub
+
+SplashScreen.Open:
+Sub Open()
+  URL.setTitle "www.genolog.com"
+  URL.setURL "http://www.genolog.com"
+  URL.setURLFont "Chicago"
+  URL.setURLsize 12
+  
+  'splashScreen.top = val(app.Prefs.getPrefValue("sx"))
+  'splashScreen.left = val(app.Prefs.getPrefValue("sy"))
+  '
+End Sub
+
+SplashScreen.Timer1.Action:
+Sub Action()
+  
+  Main.show
+  splashScreen.close
+  
+End Sub
+
+SplashScreen.StaticText2.Close:
+Sub Close()
+  main.show
+End Sub
+
+CURLLinkButton.SetTitle:
+Sub SetTitle(aTitle as string)
+  Title=aTitle
+  if URL="" then
+    URL=aTitle
+  end if
+  AdjustSize()
+End Sub
+
+CURLLinkButton.SetURL:
+Sub SetURL(aURL as string)
+  URL=aURL
+End Sub
+
+CURLLinkButton.SetURLFont:
+Sub SetURLFont(aFont as string)
+  URLFont=aFont
+  AdjustSize()
+End Sub
+
+CURLLinkButton.SetURLSize:
+Sub SetURLSize(aSize as integer)
+  URLSize=aSize
+  AdjustSize()
+End Sub
+
+CURLLinkButton.AdjustSize:
+Sub AdjustSize()
+  Graphics.TextFont=URLFont
+  Graphics.TextSize=URLSize
+  height=Graphics.TextHeight+2
+  width=Graphics.StringWidth(Title)+4
+End Sub
+
+CURLLinkButton.MouseDrag:
+Sub MouseDrag(X As Integer, Y As Integer)
+  if mouseInside then 
+    if x<0 or x>width or y<0 or y>height then
+      mouseInside=false
+      Refresh
+    end if
+  else
+    if x>0 and x<width and y>0 and y<Height then
+      mouseInside=true
+      Refresh
+    end if
+  end if
+End Sub
+
+CURLLinkButton.MouseUp:
+Sub MouseUp(X As Integer, Y As Integer)
+  if mouseInside then
+    ShowURL URL
+  end if
+  wasDown=false
+  mouseInside=false
+  Refresh
+End Sub
+
+CURLLinkButton.MouseDown:
+Function MouseDown(X As Integer, Y As Integer) As Boolean
+  wasDown=true
+  mouseInside=true
+  Refresh
+  return true
+End Function
+
+CURLLinkButton.Open:
+Sub Open()
+  'MouseCursor=pulsar
+  URLFont="Geneva"
+  URLSize=9
+End Sub
+
+CURLLinkButton.Paint:
+Sub Paint(g As Graphics)
+  Dim textRGB as Color
+  
+  if wasDown and mouseInside then
+    textRGB=RGB(255,255,255)
+    g.ForeColor=HighlightColor
+    g.FillRect 0,0,width,height
+  else
+    textRGB=RGB(0,0,0)
+  end if
+  
+  g.ForeColor=textRGB
+  g.TextFont=URLFont
+  g.TextSize=URLSize
+  g.Underline=true
+  g.DrawString Title,2,g.TextAscent
+End Sub
+
+ColorPrefs.Redraw:
+Sub Redraw()
+  
+  dim x as integer
+  
+  for x = 0 to 4 
+    if rdSelect(x).value then
+      
+      s(0).value = cbox(x).fillColor.red
+      s(1).value = cbox(x).fillColor.green
+      s(2).value = cbox(x).fillColor.blue
+      
+      box.fillcolor = cbox(x).fillColor
+      ColorValue.text = "rgb(" + str(s(0).Value) +","+ str(s(1).Value)+","+str(s(2).Value)+")"
+      
+      current =x
+    end if
+  next
+  
+End Sub
+
+ColorPrefs.Close:
+Sub Close()
+  
+  App.Prefs.setPrefValue("cTop",self.top)
+  App.Prefs.setPrefValue("cLeft",self.left)
+  
+End Sub
+
+ColorPrefs.Open:
+Sub Open()
+  
+  dim x as integer
+  
+  self.top = App.Prefs.getPrefValue("cTop",self.top)
+  self.left = App.Prefs.getPrefValue("cLeft",self.left)
+  
+  self.backcolor = main.backcolor
+  
+  for x = 0 to 4 
+    cBox(x).fillColor = app.geneColor(x)
+  next
+  
+  current = 0
+  
+  rdSelect(0).value = true
+  
+  redraw
+  
+End Sub
+
+ColorPrefs.s.ValueChanged:
+Sub ValueChanged(Index As Integer)
+  
+  box.fillColor = rgb(s(0).Value,s(1).Value,s(2).Value)
+  ColorValue.text = "rgb(" + str(s(0).Value) +","+ str(s(1).Value)+","+str(s(2).Value)+")"
+  
+End Sub
+
+ColorPrefs.rdSelect.Action:
+Sub Action(Index As Integer)
+  
+  box.fillcolor = cbox(index).fillColor
+  
+  s(0).value = cbox(index).fillColor.red
+  s(1).value = cbox(index).fillColor.green
+  s(2).value = cbox(index).fillColor.blue
+  
+  current = index
+  
+End Sub
+
+ColorPrefs.btnDefault.Action:
+Sub Action()
+  
+  dim x as integer
+  
+  app.geneColor(0) = rgb(255,128,0)
+  app.geneColor(1) = rgb(0,128,255)
+  app.geneColor(2) = rgb(255,0,128)
+  app.geneColor(3) = rgb(255,255,0)
+  app.geneColor(4) = rgb(0,0,0)
+  
+  for x = 0 to 4 
+    cBox(x).fillColor = app.geneColor(x)
+  next
+  
+End Sub
+
+ColorPrefs.btOK.Action:
+Sub Action()
+  
+  dim x as integer
+  
+  self.hide
+  
+  for x = 0 to 4 
+    app.geneColor(x) = cBox(x).fillColor 
+  next
+  
+End Sub
+
+ColorPrefs.btnChange.Action:
+Sub Action()
+  
+  cbox(current).fillColor = box.fillColor
+  
+End Sub
+
+ColorPrefs.btnCancel.Action:
+Sub Action()
+  dim x as integer
+  
+  self.backcolor = main.backcolor
+  
+  for x = 0 to 4 
+    cBox(x).fillColor = app.geneColor(x)
+  next
+  
+  current = 0
+  
+  rdSelect(0).value = true
+  
+  self.hide
+  
+End Sub
+
+MovieInfo.Close:
+Sub Close()
+  
+  App.Prefs.setPrefValue("iTop",self.top)
+  App.Prefs.setPrefValue("iLeft",self.left)
+  
+  
+End Sub
+
+MovieInfo.Open:
+Sub Open()
+  
+  dim gs as genesequence
+  dim ps(32) as genesequence
+  dim x as integer
+  
+  self.top = App.Prefs.getPrefValue("iTop",self.top)
+  self.left = App.Prefs.getPrefValue("iLeft",self.left)
+  
+  self.backcolor = main.backcolor
+  
+  current = App.Prefs.getPrefValue("current",1)
+  
+  if current = 0 then
+    box.caption = "Alpha : "
+  else
+    box.caption = "Beta : "
+  end if
+  
+  txtName.text =   main.ParentInfo(current).text
+  
+  for x = 1 to 32
+    
+    if current = 0 then
+      gs = main.alphaGenome(x)
+    else
+      gs = main.betaGenome(x)
+    end if
+    if gs.pGeneText <> "" then
+      code.Addrow ""
+      code.Cell(x-1,0) = gs.pGeneText
+      code.CellBold(x-1,0) = True
+      code.Cell(x-1,1) = str(gs.pGeneStart)
+      code.CellBold(x-1,1) = False
+      code.Cell(x-1,2) = str(gs.pGeneStop)
+      code.CellBold(x-1,2) = False
+      code.Cell(x-1,3) = str(gs.pGeneStop - gs.pGeneStart+1)
+      code.CellBold(x-1,3) = False
+    end if
+  next
+  
+End Sub
+
+MovieInfo.code.Open:
+Sub Open()
+  
+  me.heading(0) = "Gene"
+  me.heading(1) = "First"
+  me.heading(2) = "Last"
+  me.heading(3) = "Length"
+  
+  
+End Sub
+
+MovieInfo.btnOK.Action:
+Sub Action()
+  self.close
+End Sub
+</pre>

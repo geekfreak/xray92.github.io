@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>X92 Studios :: UI/Web/Design</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Language" content="en-us" />
+<meta name="description" content="Shona Reed, Portfolio" />
+<meta name="title" content="Web Design / UI Design / Identity / Visual Design" />
+<meta name="keywords" http-equiv="keywords" content="Web Design / UI Design / Identity / Visual Design" />
+<meta name="robots" content="ALL" />
+<meta name="robots" content="index, nofollow" />
+
+<link href="css/x92.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="javascript/jquery.js"></script>
+<script type="text/javascript" src="javascript/thickbox.js"></script>
+<script type="text/javascript" src="javascript/projects.js"></script>
+
+<link rel="stylesheet" href="css/thickbox.css" type="text/css" media="screen" />
+
+<link rel="shortcut icon" href="" />
+</head>
+
+<body>
+<div id="mainnav"><!-- begin mainnav -->
+<img src="images_pres/logo4.gif" alt="x92studios logo">
+<ul>
+	<li><a href="index.html">HOME</a></li>
+	<li><a href="work.html">WORK</a>
+	<ul><!--begin second level -->
+		<li id='toggleUI' class="navselect">USER INTERFACE
+		<ul id='UI' class='navmenu'><!-- begin third level -->
+			<li id='aau'>Academy of Art</li>
+			<li id='ssdp'>Saida Sullivan</li>
+			<li id='tattoo'>Tattoo MDLA</li>
+			<li id='artthink'>SFMOMA-ArtThink</li>
+			<li id='aov'>Artwork on View</li>
+			<li id='sjsu'>SJSU</li>
+			<li id='banking'>Home Banking</li>
+		</ul><!--end third level -->
+		</li>
+		<li id='toggleWEB' class="navselect">WEB & INTERFACE
+		<ul id='WEB' class='navmenu'><!-- begin third level -->
+			<li id='aau2'>Academy of Art</li>
+			<li id='ssdp2'>Saida Sullivan</li>
+			<li id='msmoma'>MSOMA</li>
+			<li id='aov2'>Artwork On View</li>
+			<li id='fixx'>Daily Fixx</li>
+			<li id='parms'>Project Arms</li>
+			<li id='verite'>Verite</li>
+			<li id='filmoids'>Filmoids</li>
+			<li id='sjsu2'>SJSU</li>
+		</ul><!-- end third level -->
+		</li>
+		<li id='toggleIDENT' class="navselect">IDENTITY
+		<ul id='IDENT' class='navmenu'><!-- begin third level -->
+			<li id='rainbow'>Rainbow Serpent</li>
+			<li id='road'>Road & Street</li>
+			<li id='radaptive'>Radaptive</li>
+			<li id='genolog'>Genolog</li>
+			<li id='lamamma'>La Mamma</li>
+			<li id='tunnel'>Tunnel Clothing</li>
+		</ul><!-- end third level -->
+		</li>
+	</ul><!-- end second level -->
+	</li>
+	<li><a href="about.html">ABOUT</a></li>
+	<li><a href="contact.html">CONTACT</a></li>
+</ul>
+</div><!-- end mainnav --> 
+
+<div id="work">
+
+	<div id="top"><!-- top section -->
+		<div id="description">
+		 <div id="ptitle"></div>
+		 <div id="pclient"></div>
+		</div> <!-- end description -->
+		<div id="descriptbtn">
+		  <a id='liveproj'  class='thickbox' ><img src="images_pres/btn_online4.gif"></a><br>
+		  <a id='casestudy' class='thickbox' ><img src="images_pres/btn_case2.gif"></a>
+		</div>
+	</div><!-- end top section -->
+	   
+	<div id="workimage">
+		<div><p><span class="instruct">Click thumbnail to view</span></p></div>
+		<div id="imageset">
+		<a id='imglb1' class='thickbox' href=""><img id='img1'></a>
+		<a id='imglb2' class='thickbox' href=""><img id='img2'></a>
+		<a id='imglb3' class='thickbox' href=""><img id='img3'></a>
+		<a id='imglb4' class='thickbox' href=""><img id='img4'></a>
+		</div>
+	</div>
+	
+	<div id="notes">
+	  <div id="services"><span class="titlesize">SERVICES</span> - Visual design and layout to strict style guidelines. Color correction, html coding and flash production for the website and kiosks in the museum.</div>
+	  <div id="problem"><span class="titlesize">PROBLEM</span> - Web & Kiosk</div>
+	  <div id="solution"><span class="titlesize">SOLUTION</span> - San Francisco Museum of Modern Art</div>  
+	</div>
+
+</div><!--end work-->
+
+<script>
+	
+function showProject(projname) {
+	
+	$('.navmenu/li').removeClass("selected");
+   	$('#'+projname).addClass("selected");
+		
+	$('#ptitle').html(projects[projname].ttle);
+	$('#pclient').html(projects[projname].client);	
+
+	$('#liveproj').attr({  href : projects[projname].exturl,      title : projects[projname].exturl_title} );
+	$('#liveproj').css({display: projects[projname].exturl ? "inline" : "none"});
+
+	$('#casestudy').attr({ href : projects[projname].cstudy_aref, title : projects[projname].cstudy_title} );
+	$('#casestudy').css({display: projects[projname].cstudy_aref ? "inline" : "none"});
+		
+
+	$('#notes').html(projects[projname].inotes);
+
+	$('#imageset').fadeOut(function() {
+			    
+		for (x=0;x<4;x++){ 
+			if (projects[projname].imges[x]) {
+			    	$('#img'+(x+1)).attr({src : 'images_cont/'+projects[projname].imges[x]+'_s.gif', width:"191", height:"118"});
+		    		$('#imglb'+(x+1)).attr({href : 'images_cont/'+projects[projname].imges[x]+'.gif', rel:"thumbs"});
+			} else {
+			    	$('#img'+(x+1)).attr({src : 'images_cont/blank.gif', width:"191", height:"118"});
+		    		$('#imglb'+(x+1)).attr({href : '', rel:"null"});
+			}
+		}
+	    $('#imageset').fadeIn('slow');
+		
+    });
+	
+}
+
+
+function toggle(id) {
+	
+   $('.navselect').not("#"+id).removeClass("greenselect");
+   $("#"+id).addClass('greenselect');
+   	
+   target = id.split('toggle').join('');
+   
+   $('.navmenu').not("#"+target).hide("slow");
+   $("#"+target).show("slow");
+}
+
+$('.navselect').bind('click',function(){ toggle(this.id);});
+
+$('.navmenu/li').bind('click',function(){ showProject(this.id);});
+
+toggle("toggleUI");
+showProject("aau");
+	
+</SCRIPT>
+</body>
+</html>
+
+

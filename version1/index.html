@@ -1,0 +1,501 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+  <TITLE>x r a y 9 2 - Online Portfolio</TITLE>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<!-- content for internet search engines-->
+
+<meta name="new media design" content="">
+
+</HEAD>
+
+<BODY  onload="changeImages(GetCookie('XRAY92'));" background="redcolor.gif" leftmargin="0" topmargin="0" marginheight="0" marginwidth="0">
+
+
+
+<SCRIPT language="JavaScript">
+
+<!--
+
+
+
+if (document.images) {
+
+
+
+    btnDesign_off = new Image(); btnDesign_off.src = "btnDesign_off.gif";
+
+    btnDesign     = new Image(); btnDesign.src     = "btnDesign_off.gif";
+
+    btnDesign_on  = new Image(); btnDesign_on.src  = "btnDesign_on.gif"; 
+
+
+
+    btnExperiment_off = new Image(); btnExperiment_off.src = "btnExperiment_off.gif";
+
+    btnExperiment     = new Image(); btnExperiment.src     = "btnExperiment_off.gif";
+
+    btnExperiment_on  = new Image(); btnExperiment_on.src  = "btnExperiment_on.gif";
+
+
+
+    btnDocument_off = new Image(); btnDocument_off.src = "btnDocument_off.gif";
+
+    btnDocument     = new Image(); btnDocument.src     = "btnDocument_off.gif";
+
+    btnDocument_on  = new Image(); btnDocument_on.src  = "btnDocument_on.gif";
+
+
+
+    btnAbout_off = new Image(); btnAbout_off.src = "btnAbout_off.gif";
+
+    btnAbout     = new Image(); btnAbout.src     = "btnAbout_off.gif";
+
+    btnAbout_on  = new Image(); btnAbout_on.src  = "btnAbout_on.gif";
+
+
+
+    currentText_none       = new Image(); currentText_none.src       = "currentText_none.gif";
+
+    currentText_Design     = new Image(); currentText_Design.src     = "currentText_Design.gif";
+
+    currentText_Experiment = new Image(); currentText_Experiment.src = "currentText_Experiment.gif";
+
+    currentText_Document   = new Image(); currentText_Document.src   = "currentText_Document.gif";
+
+    currentText_About      = new Image(); currentText_About.src      = "currentText_About.gif";
+
+
+
+    circleGrid_none       = new Image(); circleGrid_none.src       = "circleGrid_none.gif";       circleGrid_none.usemap = "#imap";
+
+    circleGrid_Design     = new Image(); circleGrid_Design.src     = "circleGrid_Design.gif";     circleGrid_Design.usemap = "#imap";
+
+    circleGrid_Experiment = new Image(); circleGrid_Experiment.src = "circleGrid_Experiment.gif"; circleGrid_Experiment.usemap = "#imap";
+
+    circleGrid_Document   = new Image(); circleGrid_Document.src   = "circleGrid_Document.gif";   circleGrid_Document.usemap = "#imap";
+
+    circleGrid_About      = new Image(); circleGrid_About.src      = "circleGrid_About.gif";      circleGrid_About.usemap = "#imap";
+
+
+
+
+
+}
+
+
+
+defaultStatus = "x r a y 9 2 - Online Porfolio";
+
+
+
+function ignore() { }
+
+
+
+function GetCookie(name) {
+
+    var start = document.cookie.indexOf(name+"=");
+
+    var len = start+name.length+1;
+
+    if ((!start) && (name != document.cookie.substring(0,name.length))) return "none";
+
+    if (start == -1) return "none";
+
+    var end = document.cookie.indexOf(";",len);
+
+    if (end == -1) end = document.cookie.length;
+
+    return document.cookie.substring(len,end);
+
+}
+
+
+
+function SetCookie(name,value) {
+
+    document.cookie = name + "=" +value 
+
+}
+
+
+
+function gridClick(x) {
+
+
+
+    switch (GetCookie('XRAY92')) {
+
+    case "Design" : {   
+
+            switch (x) {
+
+            case 2  : y=x; 
+
+			case 3  : y=x;
+
+			case 5  : y=x;
+
+			case 6  : y=x;
+
+            case 9  : y=x; 
+
+            case 11 : y=x; 
+
+            case 13 : y=x; 
+
+			case 17  : y=x;
+
+            case 20 : y=x; 
+
+            case 24 : y=x;
+
+			case 25  : y=x; 
+
+            case 27 : y=x; 
+
+            case 29 : y=x; 
+
+            }
+
+			location = "Design/page"+y+".htm"; break;
+
+            break;
+
+        }
+
+    case "Experiment" : {   
+
+            switch (x) {
+
+            case 10 : y=x; 
+
+            case 12 : y=x; 
+
+            case 19 : y=x; 
+
+
+            case 22 : y=x; 
+
+            case 24 : y=x; 
+
+            }
+
+			location = "Experiment/page"+y+".htm"; break;
+
+            break;
+
+        }
+
+    case "Document" : { 
+
+            switch (x) {
+
+            case 6  : y=x; 
+
+            case 19 : y=x; 
+
+            }
+
+			location = "Document/page"+y+".htm"; break;
+
+            break;
+
+        }
+
+    case "About" : {    
+
+            switch (x) {
+
+            case 7  : y=x; 
+
+            case 18 : y=x; 
+
+            }
+
+ 			location = "About/page"+y+".htm"; break;
+
+            break;
+
+        }
+
+    }
+
+}
+
+
+
+function changeImages(state) {
+
+
+
+    if (document.images) {
+
+
+
+        SetCookie("XRAY92",state);
+
+        
+
+        document["btnDesign"].src     = btnDesign_off.src;
+
+        document["btnExperiment"].src = btnExperiment_off.src;
+
+        document["btnDocument"].src   = btnDocument_off.src;
+
+        document["btnAbout"].src      = btnAbout_off.src;
+
+        if (state != "none") {
+
+             document["btn"+state].src     = eval("btn"+state+"_on.src"); 
+
+        }
+
+        document["currentText"].src   = eval("currentText_"+state+".src");
+
+        document["circleGrid"].src    = eval("circleGrid_"+state+".src");
+
+
+
+    } // End If
+
+} // End Function
+
+
+
+// done hiding -->
+
+</SCRIPT>
+
+
+
+<BODY onload="changeImages(GetCookie('XRAY92'));" background="redcolor.gif">
+
+
+
+<TABLE border="0" cellpadding="0" cellspacing="0" width="800">
+
+  <!-- fwtable fwsrc="Untitled" fwbase="xray92.gif" -->
+
+  <TR>
+
+    <!-- Shim row, height 1. -->
+
+    <TD><IMG src="shim.gif" width="196" height="1" border="0"></TD>
+
+    <TD><IMG src="shim.gif" width="56"  height="1" border="0"></TD>
+
+    <TD><IMG src="shim.gif" width="42"  height="1" border="0"></TD>
+
+    <TD><IMG src="shim.gif" width="49"  height="1" border="0"></TD>
+
+    <TD><IMG src="shim.gif" width="80"  height="1" border="0"></TD>
+
+    <TD><IMG src="shim.gif" width="163" height="1" border="0"></TD>
+
+    <TD><IMG src="shim.gif" width="214" height="1" border="0"></TD>
+
+    <TD><IMG src="shim.gif" width="1"   height="1" border="0"></TD>
+
+  </TR>
+
+
+
+  <TR valign="top">
+
+    <!-- row 1 -->
+
+    <TD rowspan="7" width="196" height="600"><IMG name="s1" src="s1.gif" width="196" height="600" border="0"></TD>
+
+    <TD colspan="5" width="390" height="159"><IMG name="s2" src="s2.gif" width="390" height="159" border="0" usemap="#home"></TD>
+
+    <TD rowspan="7" width="214" height="600"><IMG name="s3" src="s3.gif" width="214" height="600" border="0"></TD>
+
+    <TD width="1" height="159"><IMG src="shim.gif" width="1" height="159" border="0"></TD>
+
+  </TR>
+
+  <TR valign="top">
+
+    <!-- row 2 -->
+
+    <TD rowspan="4" width = "56" height="238"><IMG name="s5" src="s5.gif" width="56" height="238" border="0"></TD>
+
+    <TD width="42" height="57"><A href="javascript:void ignore;" onmouseover="changeImages('Design');status='';" border="0">
+
+      <IMG name="btnDesign" width=42 height=57 border=0 alt="select thumbnail to view project" title="select thumbnail to view project"></A></TD>
+
+    <TD rowspan="4" width="49" height="238" ><IMG name="s6" src="s6.gif" width="49" height="238" border="0"></TD>
+
+    <TD rowspan="4" colspan="2" width="243" height="238"><IMG name="circleGrid" usemap = "#imap" width="243" height="238" border="0"></TD>
+
+    <TD width="1" height="57"><IMG src="shim_on.gif" width="1" height="57" border="0"></TD>
+
+  </TR>
+
+  <TR valign="top">
+
+    <!-- row 3 -->
+
+    <TD width="42" height="57"><A href="javascript:void ignore;" onmouseover="changeImages('Experiment');status='';" border="0">
+
+      <IMG name="btnExperiment" width="42" height="57" border="0" alt="select thumbnail to view project" title="select thumbnail to view project"></TD>
+
+    <TD width="1" height="57"><IMG src="shim_on.gif" width="1" height="57" border="0"></TD>
+
+  </TR>
+
+  <TR valign="top">
+
+    <!-- row 4 -->
+
+    <TD width="42" height="62"><A href="javascript:void ignore;" onmouseover="changeImages('Document');status='';" border="0">
+
+      <IMG name="btnDocument" width="42" height="62" border="0" alt="select thumbnail to view project" title="select thumbnail to view project"></A></TD>
+
+    <TD width="1" height="62"><IMG src="shim_on.gif" width="1" height="62" border="0"></TD>
+
+  </TR>
+
+  <TR valign="top">
+
+    <!-- row 5 -->
+
+    <TD width="42" height="62"><A href="javascript:void ignore;" onmouseover="changeImages('About');status='';" border="0">
+
+      <IMG name="btnAbout" width="42" height="62" border="0" alt="select thumbnail to view project" title="select thumbnail to view project"></A></TD>
+
+    <TD width="1" height="62"><IMG src="shim_on.gif" width="1" height="62" border="0"></TD>
+
+  </TR>
+
+  <TR valign="top">
+
+    <!-- row 6 -->
+
+    <TD colspan="4" width="227" height="55"><IMG name="currentText" src="currentText_none.gif" width="227" height="55" border="0"></TD>
+
+    <TD width="163" height="55"><IMG name="mb" src="mb.gif" width="163" height="55" border="0"></TD>
+
+    <TD width="1" height="55"><IMG src="shim_on.gif" width="1" height="55" border="0"></TD>
+
+  </TR>
+
+  <TR valign="top">
+
+    <!-- row 7 -->
+
+    <TD colspan="5" width="390" height="148"><IMG name="s4" src="s4.gif" width="390" height="148" border="0"></TD>
+
+    <TD width="1" height="148"><IMG src="shim_on.gif" width="1" height="148" border="0"></TD>
+
+  </TR>
+
+
+
+</TABLE>
+
+
+
+<MAP name="imap">
+
+  <AREA shape="circle" coords=" 60, 24,18" href="javascript:gridClick(01);" title="01" border="0">
+
+  <AREA shape="circle" coords="100, 24,18" href="javascript:gridClick(02);" title="02" border="0">
+
+  <AREA shape="circle" coords="141, 24,18" href="javascript:gridClick(03);" title="03" border="0">
+
+  <AREA shape="circle" coords="181, 24,18" href="javascript:gridClick(04);" title="04" border="0">
+
+  <AREA shape="circle" coords="222, 24,18" href="javascript:gridClick(05);" title="05" border="0">
+
+
+
+  <AREA shape="circle" coords=" 60, 64,18" href="javascript:gridClick(06);" title="06" border="0">
+
+  <AREA shape="circle" coords="100, 64,18" href="javascript:gridClick(07);" title="07" border="0">
+
+  <AREA shape="circle" coords="140, 64,18" href="javascript:gridClick(08);" title="08" border="0">
+
+  <AREA shape="circle" coords="180, 64,18" href="javascript:gridClick(09);" title="09" border="0">
+
+  <AREA shape="circle" coords="222, 64,18" href="javascript:gridClick(10);" title="10" border="0">
+
+
+
+  <AREA shape="circle" coords=" 60,103,18" href="javascript:gridClick(11);" title="11" border="0">
+
+  <AREA shape="circle" coords="100,103,18" href="javascript:gridClick(12);" title="12" border="0">
+
+  <AREA shape="circle" coords="140,103,18" href="javascript:gridClick(13);" title="13" border="0">
+
+  <AREA shape="circle" coords="180,103,18" href="javascript:gridClick(14);" title="14" border="0">
+
+  <AREA shape="circle" coords="222,103,18" href="javascript:gridClick(15);" title="15" border="0">
+
+
+
+  <AREA shape="circle" coords=" 60,142,18" href="javascript:gridClick(16);" title="16" border="0">
+
+  <AREA shape="circle" coords="100,142,18" href="javascript:gridClick(17);" title="17" border="0">
+
+  <AREA shape="circle" coords="140,142,18" href="javascript:gridClick(18);" title="18" border="0">
+
+  <AREA shape="circle" coords="180,142,18" href="javascript:gridClick(19);" title="19" border="0">
+
+  <AREA shape="circle" coords="222,142,18" href="javascript:gridClick(20);" title="20" border="0">
+
+
+
+  <AREA shape="circle" coords=" 20,181,18" href="javascript:gridClick(21);" title="21" border="0">
+
+  <AREA shape="circle" coords=" 60,181,18" href="javascript:gridClick(22);" title="22" border="0">
+
+  <AREA shape="circle" coords="100,181,18" href="javascript:gridClick(23);" title="23" border="0">
+
+  <AREA shape="circle" coords="140,181,18" href="javascript:gridClick(24);" title="24" border="0">
+
+  <AREA shape="circle" coords="180,181,18" href="javascript:gridClick(25);" title="25" border="0">
+
+  <AREA shape="circle" coords="221,182,18" href="javascript:gridClick(26);" title="26" border="0">
+
+
+
+  <AREA shape="circle" coords=" 60,220,18" href="javascript:gridClick(27);" title="27" border="0">
+
+  <AREA shape="circle" coords="100,220,18" href="javascript:gridClick(28);" title="28" border="0">
+
+  <AREA shape="circle" coords="222,220,18" href="javascript:gridClick(29);" title="29" border="0">
+
+
+
+  <AREA shape="default" nohref>
+
+</MAP>
+
+
+
+<map name="home" id="home">
+
+	<area shape="rect" coords="214,129,348,157" href="index.html">
+
+</map>
+
+
+
+
+
+</BODY>
+
+</HTML>
+
+
+

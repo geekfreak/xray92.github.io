@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>:: Saida + Sullivan Design Partners :: Projects</title>
+<meta http-equiv="Content-type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Language" content="en-us" />
+<link href="css/ssdp.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body id="projectselected">
+<script src="javascript/prototype/prototype.js" type="text/javascript"></script>
+
+<div id=preload class="dontDisplay"><!-- --></div>
+
+<script>
+max_thumbnails = 6;
+max_images = 46;
+img_path ="images_cont/project/";
+
+setData = null;
+
+curr = "";
+
+content_set = { 
+	selected_cannery   : {title:"images_cont/projects_selected.gif",    caption:"Santa Rosa Cannery, Santa Rosa, CA",    images:[0,1,2,3,4,5] },
+	selected_sanpablo : {title:"images_cont/projects_selected.gif", caption:"6465 San Pablo Avenue, Oakland, CA",   images:[0,0,6,7,46,8]},
+	selected_carleton : {title:"images_cont/projects_selected.gif", caption:"Carleton Place Berkeley, CA",    images:[0,9,10,11,12,13]},
+    selected_machomes : {title:"images_cont/projects_selected.gif", caption:"Mac Housing Oakland, CA",    images:[0,0,0,0,14,15]},
+	selected_northbeach : {title:"images_cont/projects_selected.gif", caption:"North Beach Place Housing, San Francisco, CA",  images:[0,0,0,0,16,17]},
+	selected_mission : {title:"images_cont/projects_selected.gif", caption:"Mission Street Senior Housing San Francisco, CA",images:[0,0,0,0,19,20]},
+	selected_fleet : {title:"images_cont/projects_selected.gif", caption:"Fleet Feet Corporation  Sacramento, CA",images:[0,21,22,23,24,25]},
+	selected_turk : {title:"images_cont/projects_selected.gif", caption:"Turk Street Housing San Francisco, CA ",images:[0,0,0,0,26,27]},
+	selected_aids : {title:"images_cont/projects_competition.gif", caption:"Raising the Roof - Aids Housing - Awarded Honorable Mention",images:[0,30,31,32,28,29]},
+	selected_broadway : {title:"images_cont/projects_competition.gif", caption:"Broadway square  - Participant ",images:[0,0,0,33,34,35]},
+	selected_c2chouse : {title:"images_cont/projects_competition.gif", caption:"c2c house  - Participant",images:[0,0,0,36,37,38]},
+	selected_missionbay : {title:"images_cont/projects_competition.gif", caption:"Mission Bay Affordable Housing - awarded First Place",images:[0,0,39,40,41,42]},
+	selected_tomihiro : {title:"images_cont/projects_competition.gif", caption:"Tomihiro Museum  - Participant ",images:[0,0,0,43,44,45]}
+}
+	
+function loadSet(set){
+	
+	var content = $("selectedtextbox");
+
+	setData = content_set[set];
+
+	imgtag = "<img src='%%' class='dontDisplay'>";
+	pre = "";
+	for (x=1;x<setData.images.length;x++){
+	    pre += imgtag.split('%%').join(img_path+"image"+setData.images[x]+"_s.jpg");
+	    pre += imgtag.split('%%').join(img_path+"image"+setData.images[x]+".jpg");
+		$("preload").innerHTML = pre;
+	}
+	
+	showImage("t"+(max_thumbnails-1));		
+	content.innerHTML = $(set+"_content").innerHTML;
+	
+	for(i=0;i<max_thumbnails;i++) {
+		$("t"+i).src    			= img_path+"image"+setData.images[i]+"_s.jpg";
+		$("setTitle").src 	        = setData.title;
+		$("title").innerHTML 		= setData.caption;
+		if (setData.images[i] != 0){
+			$("t"+i).onmouseover		= function(){showImage(this.id);return true;};
+		} else {
+			$("t"+i).onmouseover		= function(){;return true;};			
+		}
+	} 				
+}
+	
+	function showImage(img){
+		curr = img;
+		ind = img.substring(1,4);
+		fade.hide();
+		fade.toggle();
+		Element.hide($('imgMain'));
+		$("imgMain").src = img_path+"image"+setData.images[ind]+".jpg";
+		setTimeout("Element.show($('imgMain'));",50);
+	}
+
+
+
+function toggle(){
+ 
+	Element.hide($('sdrop'));
+	setTimeout("Element.show($('sdrop'));",200);
+	
+	Element.hide($('cdrop'));
+	setTimeout("Element.show($('cdrop'));",200);
+	
+}
+
+</script>
+
+<div id="mainwrap">
+<div id="header">
+<ul>
+<li><a href="projects.htm" id="nprojects">Projects</a></li>
+<li><a href="firm.htm" id="nfirm">Firm</a></li>
+<li><a href="people.htm" id="npeople">People</a></li>
+<li><a href="contact.htm" id="ncontact">Contact</a></li>
+<li><a href="publications.htm" id="npublications">Publications</a></li>
+<li><a href="thankyou.htm" id="nthankyou">Thank-you</a></li>
+</ul>
+</div>
+
+<div id="column"><!-- content container -->
+<div id="projectnav">
+<ul><!-- begin main -->
+<li><a href="projects.htm">Selected</a>
+    <ul id=sdrop><!-- drop down menu items -->
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_cannery');return true;">Santa Rosa Cannery</a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_sanpablo');return true;">6465 San Pablo</a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_carleton');return true;">Carleton Place </a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_machomes');return true;">Mac Homes</a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_northbeach');return true;">North Beach Place </a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_mission');return true;">Mission Street Senior Housing</a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_fleet');return true;">Fleet Feet</a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_turk');return true;">Turk Street</a></li>
+    </ul><!-- end drop down menu items -->
+</li>
+	
+<li><a href="projects_competition.htm">Competition</a>
+    <ul id=cdrop class="competition"><!-- drop down menu items -->
+    <li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_aids');return true;">Aids </a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_broadway');return true;">Broadway Square</a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_c2chouse');return true;">c2c House</a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_missionbay');return true;">Mission Bay</a></li>
+	<li><a href="#" onclick="toggle();" onmouseover= "loadSet('selected_tomihiro');return true;">Tomihiro Museum </a></li>
+    </ul><!-- end drop down menu items -->
+</li>
+	
+<li><a href="projects_list.htm" class="plist">List</a>
+</li>
+
+</ul><!--end main -->
+</div>
+
+<div id="contenttop"><!-- top content -->
+<img id=setTitle src="images_cont/projects_selected.gif" /><!-- graphic project_selected_competition -->
+</div> 
+
+
+<!-- end top content -->
+<div id="contentwrap4"><!--wrap center content -->
+<div id="selectedphoto">
+<img id=imgMain src="" alt=""/>
+</div><!-- largeimage -->
+
+<div id=selectedtextbox><!-- project data -->
+  <p class="data">
+  <!-- -->
+</p>
+</div>
+
+
+<div id="selectedlogo"><a href="index.htm"><img src="images_cont/logo_sm.gif" alt="ssdp logo" width="95" height="33" /></a></div>
+
+<div id="info">
+<img src="images_cont/info_icon.gif" alt="Info icon" width="27" height="27" />
+</div>
+
+</div>
+<!-- end wrap center content -->
+<div id="contentbottom"><!-- bottom content -->
+<div id="title">
+<p><h2>The Cannery at Railroad Square</h2></p>
+</div>
+<div id="thumbnails2">
+<img id=t0 src="" onclick="" class="thumbs"/>
+<img id=t1 src="" onclick="" class="thumbs"/>
+<img id=t2 src="" onclick="" class="thumbs"/>
+<img id=t3 src="" onclick="" class="thumbs"/>
+<img id=t4 src="" onclick="" class="thumbs"/>
+<img id=t5 src="" onclick="" class="thumbs"/>
+</div>
+
+
+<!-- end bottom content -->
+</div><!-- end content container -->
+
+</div><!-- end main wrap -->
+
+<div id=selected_cannery_content class="dontDisplay">
+<table class="data selectedtext">
+<tr><td><span>Owner</span></td><td>Santa Rosa Canners</td></tr>
+<tr><td><span>Project Type</span></td><td>Multi-family Housing</td></tr>
+<tr><td><span>Construction Type</span></td><td>Type II F.R.</td></tr>
+<tr><td><span>Scope:</span></td><td>80 Live/Work Lofts, Flats + Garage</td></tr>
+<tr><td><span>Square Footage</span></td><td>200,000 s.f.</td></tr>
+<tr><td><span>Construction Cost</span></td><td>25 Million</td></tr>
+<tr><td><span>Completion Date</span></td><td>Summer 2007</td></tr>
+</p>
+</div>
+
+<div id=selected_sanpablo_content class="dontDisplay">
+<p class="data selectedtext">
+<span>Owner:</span> San Joaquin Group LLC<br />
+<span>Project Type:</span> Multi-family Housing, Retail<br />
+<span>Construction Type:</span> Type II F.R.<br />
+<span>Scope:</span> 33 Flats, Retail + Garage<br />
+<span>Square Footage:</span> 50,000 s.f.<br />
+<span>Construction Cost:</span> 10 Million<br />
+<span>Date of Completion:</span> Fall 2007
+</p>
+</div>
+
+<div id=selected_carleton_content class="dontDisplay">
+<p class="data selectedtext">
+<span>Owner:</span> Curtis + Partners, LLC.<br />
+<span>Project Type:</span> Multi-family Housing/ Retail<br />
+<span>Construction Type:</span> Type V-1HR<br />
+<span>Scope:</span> 34 Lofts, Flats, Retail + Garage<br />
+<span>Square Footage:</span> 41,000 s.f.<br />
+<span>Construction Cost:</span> 6.5 Million<br />
+<span>Date of Completion:</span> Winter 2007
+</p>
+</div>
+
+<div id=selected_machomes_content class="dontDisplay">
+<p class="data selectedtext">
+<span>Owner:</span> Curtis + Partners, LLC.<br />
+<span>Project Type:</span> Multi-family Housing, Retail + Garage<br />
+<span>Construction Type:</span> Type V-IHR<br />
+<span>Scope:</span> 16 Townhouses, Retail + Garage<br />
+<span>Square Footage:</span> 16,500 s.f<br />
+<span>Construction Cost:</span> 3 million<br />
+<span>Date of Completion:</span> Winter 2007
+</p>
+</div>
+
+<div id=selected_northbeach_content class="dontDisplay">
+<p class="data selectedtext">
+<span>Owner:</span> Bridge Housing, Inc; EM Johnson Interest, The John Stewart Company
+<br />
+<span>Construction Type:</span> Type I and Type V-1 hr<br />
+<span>Funding Sources:</span> Tax Credits<br />
+<span>Scope:</span> 341 Units, Community Space, Retail, + Garage
+ <br />
+ SSDP was the Associate Architect
+</p>
+</div>
+
+<div id=selected_mission_content class="dontDisplay">
+<p class="data selectedtext">
+<span>Owner:</span> Citizens Housing, Inc and Tenderloin Neighborhood Development Corporation
+ 
+<br />
+<span>Project Type:</span> Senior Housing<br />
+<span>Construction Type:</span> Type I <br />
+SSDP was the Associate Architect
+</p>
+</div>
+
+<div id=selected_fleet_content class="dontDisplay">
+<p class="data selectedtext">
+<span>Owner:</span> Fleet Feet Inc.
+<br />
+<span>Project Type:</span> Corporate Headquarters<br />
+<span>Construction Type:</span> Type V<br />
+<span>Funding Sources:</span> Private<br />
+<span>Scope:</span> Office, Storage, Garage
+<br />
+<span>Square Footage:</span> 8,800 s.f.<br />
+<span>Construction Cost:</span> $500,000<br />
+<span>Date of Completion:</span> 2001
+</p>
+</div>
+
+<div id=selected_turk_content class="dontDisplay">
+<p class="data selectedtext">
+<span>Owner:</span> Em Johnson Interest
+<br />
+<span>Project Type:</span> Affordable Family Housing<br />
+<span>Construction Type:</span> Type V-1HR<br />
+<span>Scope:</span> Up to 44 Units, Community Spaces, Retail, Parking
+<br />
+<span>Site Area:</span>27,000 s.f.<br />
+</p>
+</div>
+
+<div id=selected_aids_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<div id=selected_broadway_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<div id=selected_c2chouse_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<div id=selected_missionbay_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<div id=selected_tomihiro_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<style>
+.dontDisplay {
+display:none;
+}
+</style>
+
+<script src="javascript/moofx/moo.fx.js" type="text/javascript"></script>
+<script src="javascript/moofx/moo.fx.pack.js" type="text/javascript"></script>
+<script>
+var m = new fx.Height($('sdrop') , {duration: 150, onComplete: null});
+var fade = new fx.Opacity('imgMain',{duration: 500, onComplete:null, transition: fx.sinoidal});
+
+loadSet('selected_cannery');
+</script>
+
+</body>
+</html>

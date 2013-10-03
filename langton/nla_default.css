@@ -1,0 +1,48 @@
+td {font-family:verdana,sans-serif;font-size:8pt; color:#333333;}
+
+a, a:visited, a:active {text-decoration:none;color:#cc6600;}
+a:hover {text-decoration:none;color:#ff9900;}
+
+.nav, .nav a {color:#999999;}
+.nav b {font-weight:bold;color:#ffffff;}
+.nav a:hover, .nav a:hover b{color:#dd8800;}
+
+.navHighlight, .navHighlight a {color:#ff9900;}
+.navHighlight b {font-weight:bold;color:#ff9900;}
+.navHighlight a:hover, .navHighlight a:hover b {color:#ff9900;}
+
+
+.nav2, .nav2 a {color:#313131;}
+.nav2 b {font-weight:bold;color:#313131;}
+.nav2 a:hover, .nav2 a:hover b {color:#cc5500;}
+
+.nav2Highlight, .nav2Highlight a {color:#313131;background-color:#ff9900;}
+.nav2Highlight b {font-weight:bold;color:#313131;}
+.nav2Highlight a:hover, .nav2Highlight a:hover b {color:#313131}
+
+.largerGrey { color:#666666; font-size:13px;}
+.grey {color:#666666;}
+.lightgrey {color:#999999;}
+.caption {color:#999999;}
+
+table.valignbottom {vertical-align:bottom;}
+div.navpadding {padding:2px 8px 5px 8px;}
+div.homenavpadding {padding:2px 4px 9px 4px;}
+div.eventListPadding {padding:10px 10px 20px 10px;}
+div.imagePadding {padding:9px 4px;}
+div.rightColumnPadding {padding:0px 9px;}
+div.mainContentPadding {padding:0px 20px 10px 0px;}
+div.titlePadding { padding:0px 25px 15px 25px;}
+
+div.pad1x5 {padding:1px 5px;}
+
+span.greytitle {color:#999999;font-size:18pt;font-weight:normal;}
+
+span.beigeTitle {color:#CC6600;font-size:18pt;font-weight:normal;}
+
+span.spacer10 {font-size:10px;}
+span.spacer8 {font-size:8px;}
+span.spacer6 {font-size:6px;}
+span.spacer4 {font-size:4px;}
+input.signUpField {font-size:8pt;font-family:verdana,sans-serif;width:125px;height:18px;border-color: #000000; 
+background-color:#fffded;}

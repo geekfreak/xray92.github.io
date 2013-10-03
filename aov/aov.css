@@ -1,0 +1,61 @@
+P,.p{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #333333;
+	line-height:17px;
+}
+
+.bluebody {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #104451;
+	line-height:17px;
+}
+
+a {
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  	font-size: 12px;
+	color: #104451;
+	text-decoration: underline;
+	}
+	
+#ah {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #875C5A;
+	line-height:17px;
+	text-decoration: none;
+	}
+	
+	
+.idx  {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  	font-size: 13px;
+	color: #FFFFFF;
+	text-decoration: none;
+	}
+	
+.idx:hover  {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  	font-size: 13px;
+	color: #ffff87;
+	text-decoration: none;
+	}	
+		
+.idxcurrent   {
+  	height: 18;
+  	width: 23;
+	background-color: #875C5A;
+	text-align: center;
+	}			
+	
+.idxreg  {
+  	height: 18;
+  	width: 23;
+	background-color: #104451;
+	text-align: center;
+	}	
+	
+	
+
+	

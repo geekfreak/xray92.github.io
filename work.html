@@ -1,0 +1,262 @@
+<html>
+<head>
+<title>xray92 design</title>
+<meta http-equiv="Content-Type" content="text/html;">
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function rollon(img) {
+        if (document[img]) {
+		          document[img].src = 'images/button_' + img + '2.gif';
+				                                                          }
+																	}
+function rolloff(img) {
+        if (document[img]) {
+		          document[img].src = 'images/button_' + img + '.gif';
+				                                                          }
+																	}
+function shuffle(thumb) {
+
+  var main = document.getElementById("bigPic");
+  
+  var curr = thumb.getAttribute("PIC");
+  var nxt = main.getAttribute("PIC");
+  
+  thumb.src = "p_images/" + images[nxt] + "_s.gif";
+  thumb.setAttribute("PIC",nxt);
+
+  main.src = "p_images/" + images[curr] + ".gif";
+  main.setAttribute("PIC",curr);
+
+}
+
+function nextSet(incr) {
+  
+  var oldpos = pos;
+
+  pos = pos + incr ;
+  pos = pos >= max ? 1 : pos ;
+  pos = pos < 0 ? max-3 : pos ;
+  
+  //alert(pos+":"+max+":"+incr+":"+oldpos);
+  
+  var main = document.getElementById("bigPic");
+  var t1   = document.getElementById("t1");
+  var t2   = document.getElementById("t2");
+  var txt  = document.getElementById("txt");
+
+  main.src = "p_images/" + images[pos] + ".gif";
+  main.setAttribute("PIC",pos);
+
+  t1.src = "p_images/" + images[pos+1] + "_s.gif";
+  t1.setAttribute("PIC",pos+1);
+
+  t2.src = "p_images/" + images[pos+2] + "_s.gif";
+  t2.setAttribute("PIC",pos+2);
+
+  txt.src = "p_images/" + describe[Math.round(pos/3)+1] + ".gif";
+
+  // set previous focus icon back to 'b1_on'
+  var f = document.getElementById(foc);
+  f.src = "images/b1_on.gif";
+
+  // move focus
+  foc = "b"+((pos-1)/3);
+  
+  //draw focus icon
+  var i = document.getElementById(foc);
+  i.src = "images/b1_focus.gif";
+    
+}
+
+function initpage() {
+  nextSet(-3);
+ 
+  var o = document.getElementById("b1");
+  o.src = "images/b1_off_interface.gif";
+ 
+}
+
+function showpage(pg) {
+  pos = ( pg * 3 ) -2 ;
+  nextSet(3);
+}
+
+function gotolink() {
+  //alert(textlink[(pos+2)/3]);
+  if (textlink[(pos+2)/3] !="")
+  	window.open(textlink[(pos+2)/3])
+}
+
+var images = [ "none",
+           "msoma1","msoma2","msoma3",
+           "dfixx1","dfixx2","dfixx3",
+           "aov1","aov2","aov3",
+           "sfmoma1","sfmoma2","sfmoma3",
+           "parms1","parms2","parms3",
+           "verite1","verite2","verite3", 
+	       "filmoids1","filmoids2","filmoids3",                 
+	       "sjsu1","sjsu2","sjsu3",
+	       "genolog1","genolog2","genolog3",
+	       "roadstreet1","roadstreet2","roadstreet3",
+	       "radaptive1","radaptive2","radaptive3",
+	       "rainbow1","rainbow2","rainbow3",
+	       "mamma1","mamma2","mamma3",
+	       "tunnel1","tunnel2","tunnel3",
+           "none" ];
+
+var describe = [ "none",
+          "msoma_text",
+          "dfixx_text",
+          "aov_text",
+          "sfmoma_text",
+          "parms_text",
+          "verite_text",
+		  "filmoids_text",
+		  "sjsu_text",
+		  "genolog_text",
+		  "roadstreet_text",
+		  "radaptive_text",
+		  "rainbow_text",
+		  "mamma_text",
+		  "tunnel_text",
+	      "none" ];
+	     
+ var textlink = [ "none",
+		 "curriculum/index.html",
+		 "http://www.xray92.com/dailyfixx",
+		 "http://www.artworkonview.org",
+		 "http://www.sfmoma.org/MSOMA/index.html",
+		 "parms.html",
+		 "http://www.verite.org",
+		 "http://www.xray92.com/filmoids",
+		 "http://www.sjsu.edu/depts/art_design",
+		 "http://www.xray92.com/genolog/slash/index.html",
+		 "",
+		 "",
+		 "",
+		 "",
+		 "",
+	     "none" ];
+
+var pos=4;
+var foc="b0";
+var max=images.length-1;
+
+showpage(1);
+
+//-->
+</script>
+</head>
+<body bgcolor="#ffffff" onload = "initpage();">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+<tr align="center" valign="middle">
+<td>
+
+<table border="0" width="771" cellpadding="0" cellspacing="0">
+<tr>
+	<td rowspan="8" bgcolor="#CCCCCC" height="1"><img src="images/spacer.gif" 			
+	width="1" height="427" border="0"></td>
+	<td colspan="7" bgcolor="#CCCCCC" height="1"><img src="images/spacer.gif" 	
+	width="1" height="1" border="0"></td>	
+	<td rowspan="8" bgcolor="#CCCCCC" height="1"><img src="images/spacer.gif" 	
+	width="1" height="427" border="0"></td>
+</tr>
+
+  <tr>
+   <td rowspan="4"><img src="images/spacer.gif" width="19" height="371" border="0"></td>
+   <td colspan="1"><img src="images/logo.gif" width="165" height="45" border="0"   
+    usemap="#map"></td>
+   <td colspan="2"><img src="images/1white.gif" width="318" height="45" border="0"></td>
+    <td colspan="2"><img src="images/endwhite.gif" width="250" height="45" border="0" usemap="#Map2"></td>
+   <td rowspan="4"><img src="images/spacer.gif" width="19" height="371" border="0"></td>
+  </tr>
+  
+  <!-- row contains viewer -->
+  <tr>
+   <td width="483" rowspan="3" colspan="3"><img src="images/viewer.gif" 
+   width="483" height="326" border="0" id="bigPic" PIC="0" 
+    onclick="shuffle(document['t1'])"></td>
+  <!-- cell contains first thumbnail -->
+  <td><img src="images/1_thumbnail.gif" width="225" height="118" border="0" id="t1" PIC="1" onclick="shuffle(this)"></td>
+   <td rowspan="3">
+   <!-- table with rhs navigation -->
+   <table width="23" height="326" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><img src="images/nav_one.gif" width="23" height="32"></td>
+  </tr>
+  <tr>
+    <td><a href="work.html"onmouseover="rollon('work');" onmouseout="rolloff('work');"><img src="images/button_work.gif" width="23" height="35" border="0" name="work"></a></td>
+  </tr>
+  <tr>
+    <td><img src="images/nav_two.gif" width="23" height="21"></td>
+  </tr>
+  <tr>
+    <td><a href="services.html"onmouseover="rollon('services');" onmouseout="rolloff('services');"><img src="images/button_services.gif" width="23" height="55" border="0" name="services"></a></td>
+  </tr>
+  <tr>
+    <td><img src="images/nav_three.gif" width="23" height="20"></td>
+  </tr>
+  <tr>
+    <td><a href="contact.html"onmouseover="rollon('contact');" onmouseout="rolloff('contact');"><img src="images/button_contact.gif" width="23" height="55" border="0" name="contact"></a></td>
+  </tr>
+  <tr>
+    <td><img src="images/nav_four.gif" width="23" height="108"></td>
+  </tr>
+</table>
+   <!-- end table with rhs navigation -->
+   </td>
+  </tr>
+  
+  
+    <!-- row contains second thumbnail -->
+  <tr>
+  <td><img src="images/2_thumbnail.gif" width="225" height="118" border="0" id="t2" PIC="2" onclick="shuffle(this)"></td>
+  </tr>
+  
+  
+  <!-- row contains text -->
+  <tr>
+   <td><img src="images/text.gif" id='txt' onclick="gotolink()" width="227" height="90" border="0" id="desc"></td>
+  </tr>
+  
+  
+  <!-- row contains navsquares and arrows -->
+  
+  <tr>
+   <td><img src="images/5_1.gif" width="19" height="25" border="0"></td>
+   
+   <td colspan="1"><img src="images/spacer.gif" width="165" height="5" border="0"><br><img src="images/end.gif" width="4" height="20" border="0"><img src="images/b1_off_interface.gif" id="b0" width="11" height="20" border="0" onclick="showpage(0)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_interface.gif" id="b1" width="11" height="20" border="0" onClick="showpage(1)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_interface.gif" id="b2" width="11" height="20" border="0" onClick="showpage(2)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_interface.gif" id="b3" width="11" height="20" border="0" onClick="showpage(3)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_interface.gif" id="b4" width="11" height="20" border="0" onClick="showpage(4)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_interface.gif" id="b5" width="11" height="20" border="0" onClick="showpage(5)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_interface.gif" id="b6" width="11" height="20" border="0" onClick="showpage(6)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_interface.gif" id="b7" width="11" height="20" border="0" onClick="showpage(7)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_interface.gif" id="b8" width="11" height="20" border="0" onClick="showpage(8)"><img src="images/end.gif" width="14" height="20" border="0"></td>
+
+   <td><img src="images/spacer.gif" width="210" height="5" border="0"><br><img src="images/b1_off_identity.gif" id="b9" width="11" height="20" border="0" onclick="showpage(9)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_identity.gif" id="b10" width="11" height="20" border="0" onClick="showpage(10)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_identity.gif" id="b11" width="11" height="20" border="0" onClick="showpage(11)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_identity.gif" id="b12" width="11" height="20" border="0" onClick="showpage(12)"><img src="images/b1spacer.gif" width="6" height="20"><img src="images/b1_off_identity.gif" id="b13" width="11" height="20" border="0" onClick="showpage(13)"><img src="images/5_2.gif" width="190" height="20" border="0"><img src="images/5_2b.gif" onclick="nextSet(-3);" width="20" height="20" border="0"></td>
+   <td><img src="images/arrow_back.gif" onclick="nextSet(-3);" width="14" height="19" border="0"><img src="images/arrow_forward.gif" onclick="nextSet(3);" width="14" height="19" border="0"><br><img src="images/arrowbottom.gif" width="29" height="6" border="0"></td>
+   <td colspan="2"><img src="images/5_3b.gif" onclick="nextSet(3);" width="20" height="25" border="0"><img src="images/5_3.gif" width="230" height="25" border="0"></td>
+   <td><img src="images/5_1.gif" width="19" height="25" border="0"></td>
+  </tr>
+  
+  <!-- row contains work navigation -->
+ <tr>
+   <td><img src="images/6_1.gif" width="19" height="21" border="0"></td>
+   <td><img src="images/6_interface.gif" width="165" height="21" border="0" onclick='showpage(0)'></td>
+   <td colspan="2"><img src="images/6_identity.gif" width="318" height="21" border="0" onclick='showpage(9)'></td>
+   <td colspan="2"><img src="images/6_5.gif" width="250" height="21" border="0" usemap="#email"></td>
+   <td><img src="images/6_6.gif" width="19" height="21" border="0"></td>
+  </tr>
+  
+  <tr>
+   <td colspan="7"><img src="images/7_1.gif" width="771" height="12" border="0"></td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<map name="map">
+<area shape="rect" coords="1,1,100,48" href="index.html">
+</map>
+<map name="email" id="email">
+<area shape="rect" coords="6,3,120,18" href="mailto:shona@xray92.com">
+</map>
+<map name="Map2">
+<area shape="rect" coords="191,28,249,45" href="index.html">
+</map>
+</body>
+</html>

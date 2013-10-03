@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Untitled Document</title>
+	</head>
+	<body>
+
+<script src="lib/prototype/prototype.js" type="text/javascript"></script>
+
+<div id=preload class="dontDisplay">
+</div>
+
+<script>
+max_thumbnails = 6;
+max_images = 45;
+
+setData = null;
+
+content_set = { 
+	selected_cannery   : {title:"Santa Rosa Cannery, Santa Rosa, CA",    caption:"Santa Rosa Cannery, Santa Rosa, CA",    images:[1,2,3,4,5,0,5]},
+	selected_sanpablo : {title:"6465 San Pablo Avenue, Oakland, CA", caption:"6465 San Pablo Avenue, Oakland, CA",   images:[6,7,8,0,0,0]},
+	selected_carleton : {title:"Carleton Place Berkeley, CA ", caption:"Carleton Place Berkeley, CA",    images:[9,10,11,12,13,0]},
+    selected_machomes : {title:"Mac Housing Oakland, CA ", caption:"Mac Housing Oakland, CA",    images:[14,15,0,0,0,0]},
+	selected_northbeach : {title:"North Beach Place Housing, San Francisco, CA", caption:"North Beach Place Housing, San Francisco, CA",  images:[16,17,18,0,0,0]},
+	selected_mission : {title:"Mission Street Senior Housing San Francisco, CA - Models by SOM", caption:"Mission Street Senior Housing San Francisco, CA",images:[19,20,0,0,0,0]},
+	selected_fleet : {title:"Fleet Feet Corporation  Sacramento, CA", caption:"Fleet Feet Corporation  Sacramento, CA",images:[21,22,23,24,25,0]},
+	selected_turk : {title:"Turk Street Housing San Francisco, CA ", caption:"Turk Street Housing San Francisco, CA ",images:[26,27,0,0,0,0]},
+	selected_aids : {title:"Raising the Roof - Aids Housing - Awarded Honorable Mention", caption:"Raising the Roof - Aids Housing - Awarded Honorable Mention",images:[28,29,30,31,32,0]},
+	selected_broadway : {title:"Broadway square  - Participant ", caption:"Broadway square  - Participant ",images:[33,34,35,0,0,0]},
+	selected_c2chouse : {title:"c2c house  - Participant", caption:"c2c house  - Participant",images:[36,37,38,0,0,0]},
+	selected_missionbay : {title:"Mission Bay Affordable Housing - awarded First Place", caption:"Mission Bay Affordable Housing - awarded First Place",images:[39,40,41,42,0,0]},
+	selected_tomihiro : {title:"Tomihiro Museum  - Participant ", caption:"Tomihiro Museum  - Participant ",images:[43,44,45,0,0,0]}
+}
+	
+	function loadSet(set){
+		var content = $("show_content");
+		setData = content_set[set];
+		content.innerHTML = $(set+"_content").innerHTML;
+		for(i=0;i<max_thumbnails;i++) {
+		
+			$("t"+i).src    			= "img/image"+setData.images[i]+"_s.jpg";
+			$("setTitle").src 	        = "img/image"+setData.title+".jpg";
+			
+			$("setCaption").innerHTML 	= setData.caption;
+			if (setData.images[i] != 0){
+				$("t"+i).onclick 			= function(){showImage(this.id);return true;};
+			} else {
+				$("t"+i).onclick 			= function(){;return true;};			
+			}
+		} 
+		showImage("t0");	
+		
+		imgtag = "<img src='%%' class='dontDisplay'>";
+		pre = "";
+		for (x=1;x<setData.images.length;x++){
+		    pre += imgtag.split('%%').join("img/image"+setData.images[x]+"_s.jpg");
+		    pre += imgtag.split('%%').join("img/image"+setData.images[x]+".jpg");
+			$("preload").innerHTML = pre;
+		}
+		
+	}
+	
+	function showImage(img){
+		ind = img.substring(1,4);
+		for(i=0;i<max_thumbnails;i++) {
+			Element.removeClassName("t"+i,"isSelected");
+		}
+		Element.addClassName(img,"isSelected");
+		$("imgMain").src = "img/image"+setData.images[ind]+".jpg";
+	}
+
+</script>
+
+<a href="#" onclick= "loadSet('selected_cannery');return true;">set1</a>
+<a href="#" onclick= "loadSet('selected_sanpablo');return true;">set2</a>
+<a href="#" onclick= "loadSet('selected_carleton');return true;">set3</a>
+<a href="#" onclick= "loadSet('selected_machomes');return true;">set4</a>
+<a href="#" onclick= "loadSet('selected_northbeach');return true;">set5</a>
+<a href="#" onclick= "loadSet('selected_mission');return true;">set6</a>
+<a href="#" onclick= "loadSet('selected_fleet');return true;">set7</a>
+<a href="#" onclick= "loadSet('selected_turk');return true;">set8</a>
+<a href="#" onclick= "loadSet('selected_aids');return true;">set9</a>
+<a href="#" onclick= "loadSet('selected_broadway');return true;">set10</a>
+<a href="#" onclick= "loadSet('selected_c2chouse');return true;">set11</a>
+<a href="#" onclick= "loadSet('selected_missionbay');return true;">set12</a>
+<a href="#" onclick= "loadSet('selected_tomihiro');return true;">set13</a>
+<BR/>
+
+<img id=setTitle src="" />
+
+<div id="show_content">
+</div>
+
+<div>
+<img id=imgMain src="">
+</div>
+
+<div id=setCaption>
+</div>
+
+<div id="thumbnails2">
+<img id=t0 src="" onclick="" class="thumbs"/>
+<img id=t1 src="" onclick="" class="thumbs"/>
+<img id=t2 src="" onclick="" class="thumbs"/>
+<img id=t3 src="" onclick="" class="thumbs"/>
+<img id=t4 src="" onclick="" class="thumbs"/>
+<img id=t5 src="" onclick="" class="thumbs"/>
+<img id=t6 src="" onclick="" class="thumbs"/>
+<img id=t7 src="" onclick="" class="thumbs"/>
+<img id=t8 src="" onclick="" class="thumbs"/>
+<img id=t9 src="" onclick="" class="thumbs"/>
+<img id=t10 src="" onclick="" class="thumbs"/>
+<img id=t11 src="" onclick="" class="thumbs"/>
+<img id=t12 src="" onclick="" class="thumbs"/>
+<img id=t13 src="" onclick="" class="thumbs"/>
+</div>
+
+
+<div id=selected_cannery_content class="dontDisplay">
+<p class="data">
+<span>Owner:</span> Santa Rosa Canners<br />
+<span>Project Type:</span> Multi-family Housing<br />
+<span>Construction Type:</span> Type II F.R.<br />
+<span>Scope:</span> 82 Live/Work Lofts, Flats + Garage<br />
+<span>Square Footage:</span> 2000,000 s.f.<br />
+<span>Construction Cost:</span> 25 Million<br />
+<span>Date of Completion:</span> Summer 2007
+</p>
+</div>
+
+<div id=selected_sanpablo_content class="dontDisplay">
+<p class="data">
+<span>Owner:</span> San Joaquin Group LLC<br />
+<span>Project Type:</span> Multi-family Housing, Retail<br />
+<span>Construction Type:</span> Type II F.R.<br />
+<span>Scope:</span> 33 Flats, Retail + Garage<br />
+<span>Square Footage:</span> 50,000 s.f.<br />
+<span>Construction Cost:</span> 10 Million<br />
+<span>Date of Completion:</span> Fall, 2007
+</p>
+</div>
+
+<div id=selected_carleton_content class="dontDisplay">
+<p class="data">
+<span>Owner:</span> Curtis + Partners, LLC.<br />
+<span>Project Type:</span> Multi-family Housing/ Retail<br />
+<span>Construction Type:</span> Type V 1-hr<br />
+<span>Scope:</span> 34 Lofts, Flats, Retail + Garage<br />
+<span>Square Footage:</span> 41,000 s.f.<br />
+<span>Construction Cost:</span> 6.5 Million<br />
+<span>Date of Completion:</span> Winter 2007
+</p>
+</div>
+
+<div id=selected_machomes_content class="dontDisplay">
+<p class="data">
+<span>Owner:</span> Curtis + Partners, LLC.<br />
+<span>Project Type:</span> Multi-family Housing, Retail + Garage<br />
+<span>Construction Type:</span> Type V-hr<br />
+<span>Scope:</span> 16 Townhouses, Retail + Garage<br />
+<span>Square Footage:</span> 16,500 s.f<br />
+<span>Construction Cost:</span> 3 million<br />
+<span>Date of Completion:</span> Winter 2007
+</p>
+</div>
+
+<div id=selected_northbeach_content class="dontDisplay">
+<p class="data">
+<span>Owner:</span> Bridge Housing, Inc; EM Johnson Interest, The John Stewart Company
+<br />
+<span>Construction Type:</span> Type I and Type V-1 hr<br />
+<span>Funding Sources:</span> Tax Credits<br />
+<span>Scope:</span> 341 units, community space, retail, + garage
+ <br />
+ SSDP was the Associate Architect
+</p>
+</div>
+
+<div id=selected_mission_content class="dontDisplay">
+<p class="data">
+<span>Owner:</span> Citizens Housing, Inc and Tenderloin Neighborhood Development Corporation
+ 
+<br />
+<span>Project Type:</span> Senior Housing<br />
+<span>Construction Type:</span> Type I <br />
+SSDP was the Associate Architect
+</p>
+</div>
+
+<div id=selected_fleet_content class="dontDisplay">
+<p class="data">
+<span>Owner:</span> Fleet Feet Inc.
+<br />
+<span>Project Type:</span> Corporate Headquarters<br />
+<span>Construction Type:</span> Type V<br />
+<span>Funding Sources:</span> Private<br />
+<span>Scope:</span> Office, storage, garage
+<br />
+<span>Square Footage:</span> 8,800 s.f.<br />
+<span>Construction Cost:</span> $500,000<br />
+<span>Date of Completion:</span> 2001
+</p>
+</div>
+
+<div id=selected_turk_content class="dontDisplay">
+<p class="data">
+<span>Owner:</span> Em Johnson Interest
+<br />
+<span>Project Type:</span> Affordable Family Housing<br />
+<span>Construction Type:</span> Type V One Hour, Type 1<br />
+<span>Project Location:</span> San Francisco, CA<br />
+<span>Scope:</span> Up to 44 units, community spaces, retail, parking
+<br />
+<span>Site Area:</span>27,000 s.f.<br />
+</p>
+</div>
+
+<div id=selected_aids_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<div id=selected_broadway_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<div id=selected_c2chouse_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<div id=selected_missionbay_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<div id=selected_tomihiro_content class="dontDisplay">
+<p class="data">
+<!-- -->
+</p>
+</div>
+
+<style>
+.dontDisplay {
+display:none;
+}
+.isSelected {
+}
+
+</style>
+<script>
+loadSet('selected_cannery');
+</script>
+
+</body>
+</html>
